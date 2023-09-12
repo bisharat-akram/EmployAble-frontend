@@ -32,9 +32,9 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
     <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Signup />}/>
-        <Route index element={<Signup />} />
-        <Route path="signin" element={<SignIn />} />
+      <Route path="/" element={<SignIn />}/>
+        <Route index element={<SignIn />} />
+        <Route path="signup" element={<Signup />} />
         <Route path="employe" element={<EmployeScreen />} />
         <Route path="user" element={<UserScreen />} />
     </Routes>

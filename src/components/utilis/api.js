@@ -3,7 +3,7 @@ import { getToken } from "./localStorage";
 
 export const BASE_URL = process.env.REACT_APP_BASE_URL;
 const baseInstance = axios.create({
-  baseURL: 'https://2160-154-81-239-216.ngrok-free.app/api/',
+  baseURL: process.env.REACT_APP_BASE_URL,
 });
 
 export const postApiWithoutAuth = async (url, body) => {
