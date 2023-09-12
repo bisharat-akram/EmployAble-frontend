@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Signup from './components/Signup/Signup';
 import SignIn from './components/SignIn';
+import EmployeScreen from "./components/EmployeScreen";
+import UserScreen from "./components/UserScreen";
 import { gapi } from 'gapi-script';
 import { useEffect } from 'react';
 import { QueryClientProvider,QueryClient } from "react-query";
@@ -30,9 +32,11 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
     <BrowserRouter>
     <Routes>
-      <Route path="/" element={<SignIn />}/>
-        <Route index element={<SignIn />} />
-        <Route path="signup" element={<Signup />} />
+      <Route path="/" element={<Signup />}/>
+        <Route index element={<Signup />} />
+        <Route path="signin" element={<SignIn />} />
+        <Route path="employe" element={<EmployeScreen />} />
+        <Route path="user" element={<UserScreen />} />
     </Routes>
   </BrowserRouter>
   </QueryClientProvider>

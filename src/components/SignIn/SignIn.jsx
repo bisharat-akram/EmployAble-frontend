@@ -5,9 +5,14 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { GoogleLogin } from "react-google-login";
 import "./SignInStyle.css"; // Import your CSS file for login styles
 import { useState } from "react";
+import { postApiWithoutAuth, getApiWithAuth } from "../utilis/api";
+import { useNavigate } from "react-router";
+import { setToken } from "../utilis/localStorage";
+
 const { Title, Text } = Typography;
 
 const SignIn = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -21,12 +26,56 @@ const SignIn = () => {
     });
   };
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     console.log("Received values:", values);
     // Handle login form submission here
+    const response = await postApiWithoutAuth("login/", data);
+    console.log("==========", response);
+    if (!response.success) {
+      // setisLoading(false);
+      // enqueueSnackbar(response.error.message, {
+      //   variant: "error",
+      // });
+      console.log("========hello");
+      return;
+    }
+    console.log("========bye");
+    // navigate("/");
+    // enqueueSnackbar("Sign Up Successful", {
+    //   variant: "info",
+    // });
+    // setisLoading(false);
+
+    setToken(response.data.data.access);
+    userData();
+
+    // history.push("./personalinfo");
+  };
+
+  const userData = async () => {
+    const response = await getApiWithAuth("me");
+    console.log("res==========", response);
+    if (!response.success) {
+      // setisLoading(false);
+      // enqueueSnackbar(response.error.message, {
+      //   variant: "error",
+      // });
+      console.log("========hello");
+      return;
+    }
+    console.log("========hello", response?.data?.user_type);
+    if (response?.data?.user_type == 1) {
+      console.log("1111");
+      navigate("/user");
+    } else {
+      console.log("2222");
+
+      navigate("/employe");
+    }
   };
   const responseGoogle = (response) => {
-    console.log(response);
+    console.log(response?.data?.user_type);
+
     // Handle Google login response here
   };
 

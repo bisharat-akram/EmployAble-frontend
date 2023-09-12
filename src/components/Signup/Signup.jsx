@@ -1,6 +1,5 @@
 import { Form, Input, Button, Typography, Card } from "antd";
 import {
-  UserOutlined,
   LockOutlined,
   MailOutlined,
   IdcardOutlined,
@@ -9,15 +8,19 @@ import {
 import "./Signup.css";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import { useState } from "react";
+import { postApiWithoutAuth } from "../utilis/api";
+import { useNavigate } from "react-router";
 const { Title, Text } = Typography;
 
 const Signup = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState({
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
     confirmPassword: "",
+    user_type: 1,
   });
 
   const handleInputChange = (e) => {
@@ -28,9 +31,26 @@ const Signup = () => {
     });
   };
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     console.log("Received values:", values);
-    // Handle form submission here
+    // setisLoading(true);
+    const response = await postApiWithoutAuth("signup/", data);
+    if (!response.success) {
+      // setisLoading(false);
+      // enqueueSnackbar(response.error.message, {
+      //   variant: "error",
+      // });
+      console.log("========hello");
+      return;
+    }
+    console.log("========bye");
+    navigate("/signin");
+    // enqueueSnackbar("Sign Up Successful", {
+    //   variant: "info",
+    // });
+    // setisLoading(false);
+    // setToken(response.data.data.token);
+    // history.push("./personalinfo");
   };
 
   const responseGoogle = (response) => {
@@ -50,7 +70,7 @@ const Signup = () => {
         <Title level={3}>Sign Up</Title>
         <Form name="signup" onFinish={onFinish}>
           <Form.Item
-            name="firstName"
+            name="first_name"
             rules={[
               {
                 required: true,
@@ -62,13 +82,13 @@ const Signup = () => {
               prefix={<IdcardOutlined />}
               placeholder="First Name"
               className="InputStyle"
-              name="firstName"
-              value={data.firstName}
+              name="first_name"
+              value={data.first_name}
               onChange={handleInputChange}
             />
           </Form.Item>
           <Form.Item
-            name="lastName"
+            name="last_name"
             rules={[
               {
                 required: true,
@@ -80,8 +100,8 @@ const Signup = () => {
               prefix={<IdcardOutlined />}
               placeholder="Last Name"
               className="InputStyle"
-              name="lastName"
-              value={data.lastName}
+              name="last_name"
+              value={data.last_name}
               onChange={handleInputChange}
             />
           </Form.Item>
