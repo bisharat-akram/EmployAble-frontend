@@ -1,0 +1,34 @@
+.SignupMainContainerStyle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-image: url("../../assets/images/employAbleSignup.svg");
+}
+.SignupCardContainerStyle {
+  width: 500px;
+  padding: 20px;
+  box-shadow: 20px 20px 50px grey;
+}
+.OrContainerStyle {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.HorizontalLine {
+  border: 0.5px solid grey; /* Add a 1px solid border as the horizontal line */
+  margin: 20px 0; /* Add margin above and below the line for spacing */
+  width: 180px;
+}
+.GoogleAuthStyle {
+  width: 100% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.InputStyle {
+  height: 50px;
+}
+.SignupStyle {
+  height: 50px;
+}
