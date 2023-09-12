@@ -8,11 +8,13 @@ import { useState } from "react";
 import { postApiWithoutAuth, getApiWithAuth } from "../utilis/api";
 import { useNavigate } from "react-router";
 import { setToken } from "../utilis/localStorage";
+import { useSnackbar } from "notistack";
 
 const { Title, Text } = Typography;
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -27,56 +29,57 @@ const SignIn = () => {
   };
 
   const onFinish = async (values) => {
-    console.log("Received values:", values);
-    // Handle login form submission here
     const response = await postApiWithoutAuth("login/", data);
-    console.log("==========", response);
     if (!response.success) {
       // setisLoading(false);
-      // enqueueSnackbar(response.error.message, {
-      //   variant: "error",
-      // });
-      console.log("========hello");
+      enqueueSnackbar(response.error.message, {
+        variant: "error",
+      });
       return;
     }
-    console.log("========bye");
-    // navigate("/");
-    // enqueueSnackbar("Sign Up Successful", {
-    //   variant: "info",
-    // });
+    enqueueSnackbar("Login Successfully", {
+      variant: "info",
+    });
     // setisLoading(false);
-
     setToken(response.data.data.access);
     userData();
-
-    // history.push("./personalinfo");
   };
 
   const userData = async () => {
     const response = await getApiWithAuth("me");
-    console.log("res==========", response);
+    if (!response.success) {
+      // setisLoading(false);
+      enqueueSnackbar(response.error.message, {
+        variant: "error",
+      });
+      return;
+    }
+    enqueueSnackbar("Login Successfully", {
+      variant: "info",
+    });
+    if (response?.data?.user_type == 1) {
+      navigate("/user");
+    } else {
+      navigate("/employe");
+    }
+  };
+  const responseGoogle = async (res) => {
+    console.log(res.accessToken);
+    const response = await postApiWithoutAuth("google-login/", {
+      access_token: res.accessToken,
+    });
     if (!response.success) {
       // setisLoading(false);
       // enqueueSnackbar(response.error.message, {
       //   variant: "error",
       // });
-      console.log("========hello");
       return;
     }
-    console.log("========hello", response?.data?.user_type);
-    if (response?.data?.user_type == 1) {
-      console.log("1111");
-      navigate("/user");
-    } else {
-      console.log("2222");
-
-      navigate("/employe");
-    }
-  };
-  const responseGoogle = (response) => {
-    console.log(response?.data?.user_type);
-
-    // Handle Google login response here
+    setToken(response.data.data.access);
+    enqueueSnackbar("Login Successfully", {
+      variant: "info",
+    });
+    navigate("/user");
   };
 
   return (

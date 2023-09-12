@@ -6,14 +6,18 @@ import {
   CheckCircleOutlined,
 } from "@ant-design/icons";
 import "./Signup.css";
-import { GoogleLogin, GoogleLogout } from "react-google-login";
+import { GoogleLogin } from "react-google-login";
 import { useState } from "react";
 import { postApiWithoutAuth } from "../utilis/api";
 import { useNavigate } from "react-router";
+import { setToken } from "../utilis/localStorage";
+import { useSnackbar } from "notistack";
+
 const { Title, Text } = Typography;
 
 const Signup = () => {
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const [data, setData] = useState({
     first_name: "",
     last_name: "",
@@ -37,31 +41,33 @@ const Signup = () => {
     const response = await postApiWithoutAuth("signup/", data);
     if (!response.success) {
       // setisLoading(false);
-      // enqueueSnackbar(response.error.message, {
-      //   variant: "error",
-      // });
-      console.log("========hello");
+      enqueueSnackbar(response.error.message, {
+        variant: "error",
+      });
       return;
     }
-    console.log("========bye");
+    enqueueSnackbar("Sign Up Successful", {
+      variant: "info",
+    });
     navigate("/signin");
-    // enqueueSnackbar("Sign Up Successful", {
-    //   variant: "info",
-    // });
-    // setisLoading(false);
-    // setToken(response.data.data.token);
-    // history.push("./personalinfo");
   };
 
-  const responseGoogle = (response) => {
-    console.log(response);
-    // Handle Google login response here
-  };
-
-  const handleLogoutSuccess = () => {
-    // Perform logout-related actions here
-    console.log("User logged out successfully");
-    // You may want to clear user data and update the UI
+  const responseGoogle = async (res) => {
+    console.log(res.accessToken);
+    const response = await postApiWithoutAuth("google-login/", {
+      access_token: res.accessToken,
+    });
+    if (!response.success) {
+      enqueueSnackbar(response.error.message, {
+        variant: "error",
+      });
+      return;
+    }
+    setToken(response.data.data.access);
+    enqueueSnackbar("Sign Up Successful", {
+      variant: "info",
+    });
+    navigate("/user");
   };
 
   return (
@@ -202,11 +208,6 @@ const Signup = () => {
             className="GoogleAuthStyle"
           />
         </div>
-        <GoogleLogout
-          clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-          buttonText="Logout"
-          onLogoutSuccess={handleLogoutSuccess}
-        />
       </Card>
     </div>
   );
