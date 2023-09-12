@@ -49,7 +49,7 @@ const Signup = () => {
     enqueueSnackbar("Sign Up Successful", {
       variant: "info",
     });
-    navigate("/signin");
+    navigate("/");
   };
 
   const responseGoogle = async (res) => {

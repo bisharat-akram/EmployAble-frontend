@@ -32,7 +32,7 @@ const SignIn = () => {
     const response = await postApiWithoutAuth("login/", data);
     if (!response.success) {
       // setisLoading(false);
-      enqueueSnackbar(response.error.message, {
+      enqueueSnackbar(response.error, {
         variant: "error",
       });
       return;
@@ -49,7 +49,7 @@ const SignIn = () => {
     const response = await getApiWithAuth("me");
     if (!response.success) {
       // setisLoading(false);
-      enqueueSnackbar(response.error.message, {
+      enqueueSnackbar(response.error, {
         variant: "error",
       });
       return;
@@ -57,7 +57,7 @@ const SignIn = () => {
     enqueueSnackbar("Login Successfully", {
       variant: "info",
     });
-    if (response?.data?.user_type == 1) {
+    if (response?.data?.user_type === 1) {
       navigate("/user");
     } else {
       navigate("/employe");

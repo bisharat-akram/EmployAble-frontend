@@ -11,7 +11,7 @@ const UserScreen = () => {
   };
   return (
     <>
-      UserScreen
+      ClientScreen
       <GoogleLogout
         clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
         buttonText="Logout"
