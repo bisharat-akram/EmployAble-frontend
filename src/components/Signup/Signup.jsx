@@ -75,7 +75,8 @@ const Signup = () => {
       placement: "topLeft",
     });
 
-    navigate("/");
+    setToken(response.data.data.access);
+    navigate("/user");
   };
 
   const responseGoogle = async (res) => {
