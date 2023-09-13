@@ -1,6 +1,14 @@
 // Login.js
 import React from "react";
-import { Form, Input, Button, Typography, Card } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Typography,
+  Card,
+  Spin,
+  notification,
+} from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { GoogleLogin } from "react-google-login";
 import "./SignInStyle.css"; // Import your CSS file for login styles
@@ -9,11 +17,22 @@ import { postApiWithoutAuth, getApiWithAuth } from "../utilis/api";
 import { useNavigate } from "react-router";
 import { setToken } from "../utilis/localStorage";
 import { useSnackbar } from "notistack";
+import { LoadingOutlined } from "@ant-design/icons";
+const antIcon = (
+  <LoadingOutlined
+    style={{
+      fontSize: 24,
+      color: "white",
+    }}
+    spin
+  />
+);
 
 const { Title, Text } = Typography;
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const [isLoading, setisLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const [data, setData] = useState({
     email: "",
@@ -29,33 +48,42 @@ const SignIn = () => {
   };
 
   const onFinish = async (values) => {
+    setisLoading(true);
     const response = await postApiWithoutAuth("login/", data);
     if (!response.success) {
-      // setisLoading(false);
-      enqueueSnackbar(response.error, {
-        variant: "error",
+      setisLoading(false);
+      notification.error({
+        message: "Error",
+        description: "Error",
+        placement: "topLeft",
       });
       return;
     }
-    enqueueSnackbar("Login Successfully", {
-      variant: "info",
+    notification.error({
+      message: "Success",
+      description: "Login Successfully",
+      placement: "topLeft",
     });
-    // setisLoading(false);
     setToken(response.data.data.access);
     userData();
   };
 
   const userData = async () => {
+    setisLoading(true);
     const response = await getApiWithAuth("me");
+    setisLoading(false);
     if (!response.success) {
-      // setisLoading(false);
-      enqueueSnackbar(response.error, {
-        variant: "error",
+      notification.error({
+        message: "Error",
+        description: "Error",
+        placement: "topLeft",
       });
       return;
     }
-    enqueueSnackbar("Login Successfully", {
-      variant: "info",
+    notification.error({
+      message: "Success",
+      description: "Login Successfully",
+      placement: "topLeft",
     });
     if (response?.data?.user_type === 1) {
       navigate("/user");
@@ -64,20 +92,24 @@ const SignIn = () => {
     }
   };
   const responseGoogle = async (res) => {
-    console.log(res.accessToken);
+    setisLoading(true);
     const response = await postApiWithoutAuth("google-login/", {
       access_token: res.accessToken,
     });
+    setisLoading(false);
     if (!response.success) {
-      // setisLoading(false);
-      // enqueueSnackbar(response.error.message, {
-      //   variant: "error",
-      // });
+      notification.error({
+        message: "Error",
+        description: "Error",
+        placement: "topLeft",
+      });
       return;
     }
     setToken(response.data.data.access);
-    enqueueSnackbar("Login Successfully", {
-      variant: "info",
+    notification.error({
+      message: "Success",
+      description: "Login Successfully",
+      placement: "topLeft",
     });
     navigate("/user");
   };
@@ -131,7 +163,7 @@ const SignIn = () => {
               block
               className="LoginStyle"
             >
-              Sign In
+              {isLoading ? <Spin indicator={antIcon} /> : <> Sign In</>}
             </Button>
           </Form.Item>
         </Form>

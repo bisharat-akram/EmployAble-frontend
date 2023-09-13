@@ -1,4 +1,13 @@
-import { Form, Input, Button, Typography, Card } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Typography,
+  Card,
+  Alert,
+  notification,
+  Spin,
+} from "antd";
 import {
   LockOutlined,
   MailOutlined,
@@ -12,12 +21,23 @@ import { postApiWithoutAuth } from "../utilis/api";
 import { useNavigate } from "react-router";
 import { setToken } from "../utilis/localStorage";
 import { useSnackbar } from "notistack";
+import { LoadingOutlined } from "@ant-design/icons";
+const antIcon = (
+  <LoadingOutlined
+    style={{
+      fontSize: 24,
+      color: "white",
+    }}
+    spin
+  />
+);
 
 const { Title, Text } = Typography;
 
 const Signup = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  const [isLoading, setisLoading] = useState(false);
   const [data, setData] = useState({
     first_name: "",
     last_name: "",
@@ -37,35 +57,46 @@ const Signup = () => {
 
   const onFinish = async (values) => {
     console.log("Received values:", values);
-    // setisLoading(true);
+    setisLoading(true);
     const response = await postApiWithoutAuth("signup/", data);
+    setisLoading(false);
     if (!response.success) {
-      // setisLoading(false);
-      enqueueSnackbar(response.error.message, {
-        variant: "error",
+      notification.error({
+        message: "Error",
+        description: "Error",
+        placement: "topLeft",
       });
       return;
     }
-    enqueueSnackbar("Sign Up Successful", {
-      variant: "info",
+
+    notification.error({
+      message: "Success",
+      description: "Signup Successfully",
+      placement: "topLeft",
     });
+
     navigate("/");
   };
 
   const responseGoogle = async (res) => {
-    console.log(res.accessToken);
+    setisLoading(true);
     const response = await postApiWithoutAuth("google-login/", {
       access_token: res.accessToken,
     });
+    setisLoading(false);
     if (!response.success) {
-      enqueueSnackbar(response.error.message, {
-        variant: "error",
+      notification.error({
+        message: "Error",
+        description: "Error",
+        placement: "topLeft",
       });
       return;
     }
     setToken(response.data.data.access);
-    enqueueSnackbar("Sign Up Successful", {
-      variant: "info",
+    notification.error({
+      message: "Success",
+      description: "Signup Successfully",
+      placement: "topLeft",
     });
     navigate("/user");
   };
@@ -186,7 +217,7 @@ const Signup = () => {
               block
               className="SignupStyle"
             >
-              Sign Up
+              {isLoading ? <Spin indicator={antIcon} /> : <>Sign Up</>}
             </Button>
           </Form.Item>
         </Form>
