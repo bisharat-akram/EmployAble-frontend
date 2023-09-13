@@ -16,7 +16,7 @@ import { useState } from "react";
 import { postApiWithoutAuth, getApiWithAuth } from "../utilis/api";
 import { useNavigate } from "react-router";
 import { setToken } from "../utilis/localStorage";
-import { useSnackbar } from "notistack";
+// import { useSnackbar } from "notistack";
 import { LoadingOutlined } from "@ant-design/icons";
 const antIcon = (
   <LoadingOutlined
@@ -33,7 +33,7 @@ const { Title, Text } = Typography;
 const SignIn = () => {
   const navigate = useNavigate();
   const [isLoading, setisLoading] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
+  // const { enqueueSnackbar } = useSnackbar();
   const [data, setData] = useState({
     email: "",
     password: "",

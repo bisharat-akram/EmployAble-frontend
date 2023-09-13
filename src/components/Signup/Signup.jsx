@@ -4,7 +4,7 @@ import {
   Button,
   Typography,
   Card,
-  Alert,
+  // Alert,
   notification,
   Spin,
 } from "antd";
@@ -20,7 +20,7 @@ import { useState } from "react";
 import { postApiWithoutAuth } from "../utilis/api";
 import { useNavigate } from "react-router";
 import { setToken } from "../utilis/localStorage";
-import { useSnackbar } from "notistack";
+// import { useSnackbar } from "notistack";
 import { LoadingOutlined } from "@ant-design/icons";
 const antIcon = (
   <LoadingOutlined
@@ -36,7 +36,7 @@ const { Title, Text } = Typography;
 
 const Signup = () => {
   const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
+  // const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setisLoading] = useState(false);
   const [data, setData] = useState({
     first_name: "",
