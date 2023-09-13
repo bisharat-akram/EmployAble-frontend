@@ -54,12 +54,12 @@ const SignIn = () => {
       setisLoading(false);
       notification.error({
         message: "Error",
-        description: "Error",
+        description: response.message?.data?.error,
         placement: "topLeft",
       });
       return;
     }
-    notification.error({
+    notification.success({
       message: "Success",
       description: "Login Successfully",
       placement: "topLeft",
@@ -75,12 +75,12 @@ const SignIn = () => {
     if (!response.success) {
       notification.error({
         message: "Error",
-        description: "Error",
+        description: response.message?.data?.error,
         placement: "topLeft",
       });
       return;
     }
-    notification.error({
+    notification.success({
       message: "Success",
       description: "Login Successfully",
       placement: "topLeft",
@@ -100,13 +100,13 @@ const SignIn = () => {
     if (!response.success) {
       notification.error({
         message: "Error",
-        description: "Error",
+        description: response.message?.data?.error,
         placement: "topLeft",
       });
       return;
     }
     setToken(response.data.data.access);
-    notification.error({
+    notification.success({
       message: "Success",
       description: "Login Successfully",
       placement: "topLeft",
