@@ -1,0 +1,7 @@
+.UserScreenContainer {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  padding: 3% 5%;
+  background-image: url("../../assets/images/employAbleSignup.svg");
+}
