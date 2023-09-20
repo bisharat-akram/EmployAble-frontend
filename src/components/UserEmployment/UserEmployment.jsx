@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, DatePicker, Row, Col } from "antd";
+import { Form, Input, DatePicker, Row, Col, Button } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
 
-const UserEmployment = ({ userData }) => {
+const UserEmployment = ({ userData, employment, setEmployment }) => {
   const [form] = Form.useForm();
   const [isEditing, setIsEditing] = useState(false);
   const handleEditClick = () => {
@@ -22,10 +23,18 @@ const UserEmployment = ({ userData }) => {
     form.setFieldsValue({
       employer_nam: userData.employer_nam,
       position: userData.position,
-      start_date: userData.start_date, // Use moment.js to format date
-      end_date: userData.end_date, // Use moment.js to format date
+      start_date: userData.start_date,
+      end_date: userData.end_date,
     });
   }, [userData]);
+
+  const handleFormValuesChange = (changedValues) => {
+    const editedFieldName = Object.keys(changedValues)[0];
+    setEmployment({
+      ...employment,
+      [editedFieldName]: changedValues[editedFieldName],
+    });
+  };
 
   return (
     <>
@@ -34,13 +43,9 @@ const UserEmployment = ({ userData }) => {
         form={form}
         name="user-profile-form"
         onFinish={handleSave}
-        labelCol={{ span: 24 }} // Set label column to full width (labels on top)
-        wrapperCol={{ span: 24 }} // Set wrapper column to full width
-        // initialValues={{
-        //   firstName: userData?.user?.first_name,
-        //   lastName: userData?.user?.last_name,
-        //   email: userData?.user?.email,
-        // }}
+        labelCol={{ span: 24 }}
+        wrapperCol={{ span: 24 }}
+        onValuesChange={handleFormValuesChange}
       >
         <Row gutter={[16, 16]}>
           <Col span={12}>
@@ -54,10 +59,7 @@ const UserEmployment = ({ userData }) => {
                 },
               ]}
             >
-              <Input
-                //   disabled={!isEditing}
-                className="editInputStyling"
-              />
+              <Input className="editInputStyling" />
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -71,10 +73,7 @@ const UserEmployment = ({ userData }) => {
                 },
               ]}
             >
-              <Input
-                //    disabled={!isEditing}
-                className="editInputStyling"
-              />
+              <Input className="editInputStyling" />
             </Form.Item>
           </Col>
         </Row>
@@ -86,8 +85,6 @@ const UserEmployment = ({ userData }) => {
               rules={[
                 {
                   type: "object",
-                  required: true,
-                  message: "Please select your start date",
                 },
               ]}
             >
@@ -101,8 +98,6 @@ const UserEmployment = ({ userData }) => {
               rules={[
                 {
                   type: "object",
-                  required: true,
-                  message: "Please select your end date",
                 },
               ]}
             >
@@ -110,6 +105,9 @@ const UserEmployment = ({ userData }) => {
             </Form.Item>
           </Col>
         </Row>
+        <Button type="danger" icon={<DeleteOutlined />}>
+          Delete
+        </Button>
       </Form>
     </>
   );

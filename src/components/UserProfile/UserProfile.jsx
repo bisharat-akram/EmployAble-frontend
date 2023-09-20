@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Select, notification, Row, Col } from "antd";
-import { getApiWithAuth } from "../utilis/api";
+import { getApiWithAuth, postApiWithAuth } from "../utilis/api";
 import UserEmployment from "../UserEmployment";
 import UserEducation from "../UserEducation";
+import { patchApiWithAuth } from "../utilis/api";
 import "./UserProfile.css";
 
 const UserProfile = () => {
@@ -14,6 +15,10 @@ const UserProfile = () => {
   const [skillList, setSkillList] = useState([]);
   const [employmentData, setEmploymentData] = useState([{ id: 1 }]);
   const [educationData, setEducationData] = useState([{ id: 1 }]);
+  const [employment, setEmployment] = useState({});
+  const [education, setEducation] = useState({});
+  const [updateUser, setUpdateUser] = useState({});
+
   const highestEducation = [
     {
       id: 1,
@@ -30,7 +35,6 @@ const UserProfile = () => {
     setisLoading(true);
     const response = await getApiWithAuth("jobs");
     setJobList(response?.data);
-    console.log("==========>job", response.data);
     setisLoading(false);
     if (!response.success) {
       notification.error({
@@ -46,7 +50,6 @@ const UserProfile = () => {
     setisLoading(true);
     const response = await getApiWithAuth("skills");
     setSkillList(response?.data);
-    console.log("==========>skill", response.data);
     setisLoading(false);
     if (!response.success) {
       notification.error({
@@ -57,16 +60,43 @@ const UserProfile = () => {
       return;
     }
   };
+  const handleFormValuesChange = (changedValues) => {
+    const editedFieldName = Object.keys(changedValues)[0];
+    if (
+      editedFieldName === "first_name" ||
+      editedFieldName === "last_name" ||
+      editedFieldName === "email"
+    ) {
+      setUpdateUser({
+        ...updateUser,
+        user: {
+          ...updateUser.user,
+          [editedFieldName]: changedValues[editedFieldName],
+        },
+      });
+    } else {
+      setUpdateUser({
+        ...updateUser,
+        [editedFieldName]: changedValues[editedFieldName],
+      });
+    }
+    setIsEditing(true);
+  };
 
   const userDataAPI = async () => {
     setisLoading(true);
     const response = await getApiWithAuth("profile");
     setUserData(response?.data);
-    console.log("==========>", response.data);
     form.setFieldsValue({
-      firstName: response.data?.user?.first_name,
-      lastName: response.data?.user?.last_name,
+      first_name: response.data?.user?.first_name,
+      last_name: response.data?.user?.last_name,
       email: response.data?.user?.email,
+      phone_number: response.data?.phone_number,
+      description: response.data?.description,
+      field_name: response?.data?.field_name,
+      skills: response?.data?.skills,
+      interested_jobs: response?.data?.interested_jobs,
+      prior_highest_education: response?.data?.prior_highest_education,
     });
     setisLoading(false);
     if (!response.success) {
@@ -85,29 +115,34 @@ const UserProfile = () => {
     jobListApi();
   }, []);
 
-  const handleEditClick = () => {
-    setIsEditing(true);
+  const handleEditClick = async () => {
+    setisLoading(true);
+    const response = await patchApiWithAuth("profile", updateUser);
+    setisLoading(false);
+    if (!response.success) {
+      notification.error({
+        message: "Error",
+        description: response.message?.data?.error,
+        placement: "topLeft",
+      });
+      return;
+    }
+    notification.success({
+      message: "Success",
+      description: "Updated Successfully",
+      placement: "topLeft",
+    });
+    userDataAPI();
   };
 
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-    form.resetFields(); // Reset form fields to their initial values
-  };
-
-  const handleSave = (values) => {
-    // Handle saving the edited user data here (e.g., send a request to update the user)
-    console.log("Edited User Data:", values);
-    // setIsEditing(false);
-  };
-
-  const handleAddEmployment = () => {
-    // Create a new employment object and add it to the employmentData array
-    const newEmployment = { id: employmentData.length + 1 }; // Assign a unique ID
+  const handleAddEmployment = async () => {
+    const newEmployment = { id: employmentData.length + 1 };
     setEmploymentData([...employmentData, newEmployment]);
+    const response = await postApiWithAuth("employment/", employment);
+    console.log("res=======", response);
   };
   const handleAddEducation = () => {
-    // Create a new employment object and add it to the employmentData array
-    const newEducation = { id: educationData.length + 1 }; // Assign a unique ID
+    const newEducation = { id: educationData.length + 1 };
     setEducationData([...educationData, newEducation]);
   };
   return (
@@ -119,22 +154,15 @@ const UserProfile = () => {
           className="userProfileContainer"
           form={form}
           name="user-profile-form"
-          onFinish={handleSave}
+          onFinish={handleEditClick}
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
-          initialValues={{
-            firstName: userData?.user?.first_name,
-            lastName: userData?.user?.last_name,
-            email: userData?.user?.email,
-            description: userData?.description,
-            phone_number: userData?.phone_number,
-            field_name: userData?.field_name,
-          }}
+          onValuesChange={handleFormValuesChange}
         >
           <Row gutter={[16, 16]}>
             <Col span={12}>
               <Form.Item
-                name="firstName"
+                name="first_name"
                 label={<span className="labelStyling">First Name</span>}
                 rules={[
                   {
@@ -148,7 +176,7 @@ const UserProfile = () => {
             </Col>
             <Col span={12}>
               <Form.Item
-                name="lastName"
+                name="last_name"
                 label={<span className="labelStyling">Last Name</span>}
                 rules={[
                   {
@@ -204,12 +232,7 @@ const UserProfile = () => {
               <Form.Item
                 name="description"
                 label={<span className="labelStyling">Description</span>}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter a description",
-                  },
-                ]}
+                rules={[]}
               >
                 <Input.TextArea
                   className="editInputStyling"
@@ -221,12 +244,6 @@ const UserProfile = () => {
               <Form.Item
                 name="field_name"
                 label={<span className="labelStyling">Field Name</span>}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter field name",
-                  },
-                ]}
               >
                 <Input.TextArea
                   className="editInputStyling"
@@ -249,7 +266,7 @@ const UserProfile = () => {
               >
                 <Select placeholder="Select highest education">
                   {highestEducation.map((edu) => (
-                    <Select.Option key={edu.id} value={edu.name}>
+                    <Select.Option key={edu.id} value={edu.id}>
                       {edu.name}
                     </Select.Option>
                   ))}
@@ -271,7 +288,7 @@ const UserProfile = () => {
               >
                 <Select mode="multiple" placeholder="Select skills">
                   {skillList.map((skill) => (
-                    <Select.Option key={skill.id} value={skill.name}>
+                    <Select.Option key={skill.id} value={skill.id}>
                       {skill.name}
                     </Select.Option>
                   ))}
@@ -293,7 +310,7 @@ const UserProfile = () => {
               >
                 <Select mode="multiple" placeholder="Select jobs">
                   {jobList.map((job) => (
-                    <Select.Option key={job.id} value={job.name}>
+                    <Select.Option key={job.id} value={job.id}>
                       {job.name}
                     </Select.Option>
                   ))}
@@ -301,37 +318,25 @@ const UserProfile = () => {
               </Form.Item>
             </Col>
           </Row>
-          {isEditing ? (
-            <Form.Item
-              wrapperCol={{ span: 24 }}
-              style={{ display: "flex", justifyContent: "flex-end" }}
-            >
-              <Button
-                type="primary"
-                htmlType="submit"
-                style={{ marginRight: "10px" }}
-              >
-                Save
-              </Button>
-              <Button type="default" onClick={handleCancelEdit}>
-                Cancel
-              </Button>
-            </Form.Item>
-          ) : (
-            <Form.Item
-              wrapperCol={{ span: 24 }}
-              style={{ display: "flex", justifyContent: "flex-end" }}
-            >
-              <Button type="primary" onClick={handleEditClick}>
-                Edit
-              </Button>
-            </Form.Item>
-          )}
+
+          <Form.Item
+            wrapperCol={{ span: 24 }}
+            style={{ display: "flex", justifyContent: "flex-end" }}
+          >
+            <Button type="primary" htmlType="submit" disabled={!isEditing}>
+              Save
+            </Button>
+          </Form.Item>
         </Form>
       </div>
       <h1 className="headingStyle">Employment Data</h1>
       {employmentData.map((emp) => (
-        <UserEmployment key={emp.id} userData={userData} />
+        <UserEmployment
+          key={emp.id}
+          userData={userData}
+          employment={employment}
+          setEmployment={setEmployment}
+        />
       ))}
       <div
         style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
@@ -347,12 +352,7 @@ const UserProfile = () => {
       <div
         style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
       >
-        <Button
-          type="primary"
-          htmlType="submit"
-          //   style={{ marginRight: "10px" }}
-          onClick={handleAddEducation}
-        >
+        <Button type="primary" onClick={handleAddEducation}>
           Add Education +
         </Button>
       </div>

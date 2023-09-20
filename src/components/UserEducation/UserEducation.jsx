@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, DatePicker, Row, Col } from "antd";
+import { Form, Input, DatePicker, Row, Col, Select } from "antd";
 
 const UserEducation = (userData) => {
   const [form] = Form.useForm();
   const [isEditing, setIsEditing] = useState(false);
+  const degreeType = [
+    { id: 1, name: "High School" },
+    { id: 2, name: "Bachelor’s" },
+  ];
   const handleEditClick = () => {
     setIsEditing(true);
   };
@@ -83,8 +87,6 @@ const UserEducation = (userData) => {
               rules={[
                 {
                   type: "object",
-                  required: true,
-                  message: "Please select your start date",
                 },
               ]}
             >
@@ -98,12 +100,32 @@ const UserEducation = (userData) => {
               rules={[
                 {
                   type: "object",
-                  required: true,
-                  message: "Please select your end date",
                 },
               ]}
             >
               <DatePicker className="editInputStyling" format="YYYY-MM-DD" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={[16, 16]}>
+          <Col style={{ width: "370px" }}>
+            <Form.Item
+              name="degree_type"
+              label={<span className="labelStyling">Degree</span>}
+              rules={[
+                {
+                  required: true,
+                  message: "Please select your degree",
+                },
+              ]}
+            >
+              <Select placeholder="Select degree">
+                {degreeType.map((deg) => (
+                  <Select.Option key={deg.id} value={deg.id}>
+                    {deg.name}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
           </Col>
         </Row>
