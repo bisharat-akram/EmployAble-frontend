@@ -1,10 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select, notification, Row, Col } from "antd";
-import { getApiWithAuth, postApiWithAuth } from "../utilis/api";
+import {
+  Form,
+  Input,
+  Button,
+  Select,
+  notification,
+  Row,
+  Col,
+  Spin,
+} from "antd";
+import { getApiWithAuth } from "../utilis/api";
 import UserEmployment from "../UserEmployment";
 import UserEducation from "../UserEducation";
 import { patchApiWithAuth } from "../utilis/api";
 import "./UserProfile.css";
+
+import { LoadingOutlined } from "@ant-design/icons";
+const antIcon = (
+  <LoadingOutlined
+    style={{
+      fontSize: 24,
+      color: "white",
+    }}
+    spin
+  />
+);
 
 const UserProfile = () => {
   const [form] = Form.useForm();
@@ -13,12 +33,9 @@ const UserProfile = () => {
   const [userData, setUserData] = useState({});
   const [jobList, setJobList] = useState([]);
   const [skillList, setSkillList] = useState([]);
-  const [employmentData, setEmploymentData] = useState([{ id: 1 }]);
-  const [educationData, setEducationData] = useState([{ id: 1 }]);
   const [employment, setEmployment] = useState({});
   const [education, setEducation] = useState({});
   const [updateUser, setUpdateUser] = useState({});
-  const [addEmployment, setAddEmployment] = useState(false);
 
   const highestEducation = [
     {
@@ -87,10 +104,8 @@ const UserProfile = () => {
   const userDataAPI = async () => {
     setisLoading(true);
     const response = await getApiWithAuth("profile");
-    console.log(
-      "=======================================",
-      response?.data?.employment_history
-    );
+    setIsEditing(false);
+
     setUserData(response?.data);
     form.setFieldsValue({
       first_name: response.data?.user?.first_name,
@@ -141,15 +156,6 @@ const UserProfile = () => {
     userDataAPI();
   };
 
-  const handleAddEmployment = () => {
-    setAddEmployment(true);
-    // const newEmployment = { id: employmentData.length + 1 };
-    // setEmploymentData([...employmentData, newEmployment]);
-  };
-  const handleAddEducation = () => {
-    // const newEducation = { id: educationData.length + 1 };
-    // setEducationData([...educationData, newEducation]);
-  };
   return (
     <>
       {" "}
@@ -219,7 +225,7 @@ const UserProfile = () => {
                 label={<span className="labelStyling">Phone Number</span>}
                 rules={[
                   {
-                    pattern: /^\+?1?\d{9,15}$/, // Regex pattern for phone number validation
+                    pattern: /^\+?1?\d{9,15}$/,
                     message: "Invalid phone number",
                   },
                   {
@@ -239,10 +245,7 @@ const UserProfile = () => {
                 label={<span className="labelStyling">Description</span>}
                 rules={[]}
               >
-                <Input.TextArea
-                  className="editInputStyling"
-                  rows={4} // Adjust the number of rows as needed
-                />
+                <Input.TextArea className="editInputStyling" rows={4} />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -250,10 +253,7 @@ const UserProfile = () => {
                 name="field_name"
                 label={<span className="labelStyling">Field Name</span>}
               >
-                <Input.TextArea
-                  className="editInputStyling"
-                  rows={4} // Adjust the number of rows as needed
-                />
+                <Input.TextArea className="editInputStyling" rows={4} />
               </Form.Item>
             </Col>
           </Row>
@@ -328,8 +328,13 @@ const UserProfile = () => {
             wrapperCol={{ span: 24 }}
             style={{ display: "flex", justifyContent: "flex-end" }}
           >
-            <Button type="primary" htmlType="submit" disabled={!isEditing}>
-              Save
+            <Button
+              type="primary"
+              htmlType="submit"
+              disabled={!isEditing}
+              isLoading
+            >
+              {isLoading ? <Spin indicator={antIcon} /> : <>Save</>}
             </Button>
           </Form.Item>
         </Form>
@@ -340,50 +345,40 @@ const UserProfile = () => {
         : userData?.employment_history?.map((employmentItem, index) => (
             <UserEmployment
               key={index}
-              userData={userData}
               employment={employment}
               setEmployment={setEmployment}
               employmentItem={employmentItem}
+              userDataAPI={userDataAPI}
+              newEmp={false}
             />
           ))}
       <UserEmployment
         key={1}
-        userData={userData}
         employment={employment}
         setEmployment={setEmployment}
+        userDataAPI={userDataAPI}
+        newEmp={true}
       />
-      <div
-        style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
-      >
-        <Button type="primary" htmlType="submit" onClick={handleAddEmployment}>
-          Add Employment +
-        </Button>
-      </div>
       <h1 className="headingStyle">Education Data</h1>
       {userData?.education_history?.length === 0
         ? ""
         : userData?.education_history?.map((educationItem, index) => (
             <UserEducation
               key={index}
-              userData={userData}
               education={education}
               setEducation={setEducation}
               educationItem={educationItem}
+              userDataAPI={userDataAPI}
+              newEdu={false}
             />
           ))}
       <UserEducation
         key={2}
-        userData={userData}
         education={education}
         setEducation={setEducation}
+        userDataAPI={userDataAPI}
+        newEdu={true}
       />
-      <div
-        style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
-      >
-        <Button type="primary" onClick={handleAddEducation}>
-          Add Education +
-        </Button>
-      </div>
     </>
   );
 };

@@ -1,30 +1,41 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, DatePicker, Row, Col, Button } from "antd";
+import {
+  Form,
+  Input,
+  DatePicker,
+  Row,
+  Col,
+  Button,
+  notification,
+  Spin,
+} from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
-import { deleteApiWithAuth, postApiWithAuth } from "../utilis/api";
+import {
+  deleteApiWithAuth,
+  postApiWithAuth,
+  getApiWithAuth,
+} from "../utilis/api";
 import moment from "moment";
+import { LoadingOutlined } from "@ant-design/icons";
+const antIcon = (
+  <LoadingOutlined
+    style={{
+      fontSize: 24,
+    }}
+    spin
+  />
+);
 const UserEmployment = ({
-  userData,
+  newEmp,
   employment,
   setEmployment,
   employmentItem,
+  userDataAPI,
 }) => {
   const [form] = Form.useForm();
-  const [isEditing, setIsEditing] = useState(false);
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
+  const [isLoading, setisLoading] = useState(false);
+  const [isDeleteLoading, setisDeleteLoading] = useState(false);
 
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-    form.resetFields(); // Reset form fields to their initial values
-  };
-
-  const handleSave = (values) => {
-    // Handle saving the edited user data here (e.g., send a request to update the user)
-    console.log("Edited User Data:", values);
-    // setIsEditing(false);
-  };
   useEffect(() => {
     if (employmentItem) {
       form.setFieldsValue({
@@ -62,14 +73,46 @@ const UserEmployment = ({
     }
   };
   const deleteEmployment = async () => {
+    setisDeleteLoading(true);
     const response = await deleteApiWithAuth(
       `employment/${employmentItem?.id}`
     );
-    console.log("re=========", response);
+    setisDeleteLoading(false);
+    if (!response.success) {
+      notification.error({
+        message: "Error",
+        description: response.message?.data?.error,
+        placement: "topLeft",
+      });
+      return;
+    }
+    notification.success({
+      message: "Success",
+      description: "Deleted Successfully",
+      placement: "topLeft",
+    });
+    userDataAPI();
   };
+
   const saveEmployment = async () => {
+    setisLoading(true);
     const response = await postApiWithAuth("employment/", employment);
-    console.log("re=========", response);
+    setisLoading(false);
+    if (!response.success) {
+      notification.error({
+        message: "Error",
+        description: response.message?.data?.error,
+        placement: "topLeft",
+      });
+      return;
+    }
+    notification.success({
+      message: "Success",
+      description: "Updated Successfully",
+      placement: "topLeft",
+    });
+    form.resetFields();
+    userDataAPI();
   };
   return (
     <>
@@ -77,7 +120,6 @@ const UserEmployment = ({
         className="userProfileContainer"
         form={form}
         name="user-profile-form"
-        onFinish={handleSave}
         labelCol={{ span: 24 }}
         wrapperCol={{ span: 24 }}
         onValuesChange={handleFormValuesChange}
@@ -140,15 +182,28 @@ const UserEmployment = ({
             </Form.Item>
           </Col>
         </Row>
-        <Button
-          type="danger"
-          icon={<DeleteOutlined />}
-          onClick={deleteEmployment}
-        >
-          Delete
-        </Button>
-        <Button type="danger" onClick={saveEmployment}>
-          Save
+        {!newEmp ? (
+          <Button
+            danger
+            icon={<DeleteOutlined />}
+            onClick={deleteEmployment}
+            style={{ marginRight: "10px" }}
+          >
+            {isDeleteLoading ? (
+              <Spin indicator={antIcon} style={{ color: "red" }} />
+            ) : (
+              <>Delete</>
+            )}
+          </Button>
+        ) : (
+          ""
+        )}
+        <Button type="primary" onClick={saveEmployment}>
+          {isLoading ? (
+            <Spin indicator={antIcon} style={{ color: "white" }} />
+          ) : (
+            <>Save</>
+          )}
         </Button>
       </Form>
     </>
