@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, DatePicker, Row, Col, Select } from "antd";
+import { Form, Input, DatePicker, Row, Col, Button, Select } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
+import { deleteApiWithAuth, postApiWithAuth } from "../utilis/api";
+import moment from "moment";
 
-const UserEducation = (userData) => {
+const UserEducation = ({
+  userData,
+  education,
+  setEducation,
+  educationItem,
+}) => {
   const [form] = Form.useForm();
   const [isEditing, setIsEditing] = useState(false);
   const degreeType = [
@@ -23,14 +31,45 @@ const UserEducation = (userData) => {
     // setIsEditing(false);
   };
   useEffect(() => {
-    form.setFieldsValue({
-      university_name: userData.university_name,
-      major: userData.major,
-      start_date: userData.start_date, // Use moment.js to format date
-      end_date: userData.end_date, // Use moment.js to format date
-    });
-  }, [userData]);
+    if (educationItem) {
+      form.setFieldsValue({
+        university_name: educationItem.university_name,
+        major: educationItem.major,
+        // start_date: educationItem.start_date,
+        // end_date: educationItem.end_date,
+        degree_type: educationItem.degree_type,
+      });
+    }
+  }, [educationItem]);
 
+  const handleFormValuesChange = (changedValues) => {
+    const editedFieldName = Object.keys(changedValues)[0];
+    const formattedStartDate = moment(changedValues.start_date).format(
+      "YYYY-MM-DD"
+    );
+    const formattedEndDate = moment(changedValues.end_date).format(
+      "YYYY-MM-DD"
+    );
+    if (editedFieldName === "start_date" || editedFieldName === "end_date") {
+      setEducation({
+        ...education,
+        start_date: formattedStartDate,
+        end_date: formattedEndDate,
+      });
+    } else {
+      setEducation({
+        ...education,
+        [editedFieldName]: changedValues[editedFieldName],
+      });
+    }
+  };
+  const saveEducation = async () => {
+    const response = await postApiWithAuth("education/", education);
+    console.log("re=========", response);
+  };
+  const deleteEducation = async () => {
+    const response = await deleteApiWithAuth(`education/${educationItem?.id}`);
+  };
   return (
     <>
       <Form
@@ -38,13 +77,9 @@ const UserEducation = (userData) => {
         form={form}
         name="user-profile-form"
         onFinish={handleSave}
-        labelCol={{ span: 24 }} // Set label column to full width (labels on top)
-        wrapperCol={{ span: 24 }} // Set wrapper column to full width
-        // initialValues={{
-        //   firstName: userData?.user?.first_name,
-        //   lastName: userData?.user?.last_name,
-        //   email: userData?.user?.email,
-        // }}
+        labelCol={{ span: 24 }}
+        wrapperCol={{ span: 24 }}
+        onValuesChange={handleFormValuesChange}
       >
         <Row gutter={[16, 16]}>
           <Col span={12}>
@@ -120,7 +155,7 @@ const UserEducation = (userData) => {
               ]}
             >
               <Select placeholder="Select degree">
-                {degreeType.map((deg) => (
+                {degreeType?.map((deg) => (
                   <Select.Option key={deg.id} value={deg.id}>
                     {deg.name}
                   </Select.Option>
@@ -129,6 +164,16 @@ const UserEducation = (userData) => {
             </Form.Item>
           </Col>
         </Row>
+        <Button
+          type="danger"
+          icon={<DeleteOutlined />}
+          onClick={deleteEducation}
+        >
+          Delete
+        </Button>
+        <Button type="danger" onClick={saveEducation}>
+          Save
+        </Button>
       </Form>
     </>
   );

@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Form, Input, DatePicker, Row, Col, Button } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
-
-const UserEmployment = ({ userData, employment, setEmployment }) => {
+import { deleteApiWithAuth, postApiWithAuth } from "../utilis/api";
+import moment from "moment";
+const UserEmployment = ({
+  userData,
+  employment,
+  setEmployment,
+  employmentItem,
+}) => {
   const [form] = Form.useForm();
   const [isEditing, setIsEditing] = useState(false);
   const handleEditClick = () => {
@@ -20,22 +26,51 @@ const UserEmployment = ({ userData, employment, setEmployment }) => {
     // setIsEditing(false);
   };
   useEffect(() => {
-    form.setFieldsValue({
-      employer_nam: userData.employer_nam,
-      position: userData.position,
-      start_date: userData.start_date,
-      end_date: userData.end_date,
-    });
-  }, [userData]);
+    if (employmentItem) {
+      form.setFieldsValue({
+        employer_name: employmentItem.employer_name,
+        position: employmentItem.position,
+        // start_date: moment(employmentItem.start_date).format(
+        //   "YYYY-MM-DDTHH:mm:ss[Z]"
+        // ),
+        // end_date: moment(employmentItem.end_date).format(
+        //   "YYYY-MM-DDTHH:mm:ss[Z]"
+        // ),
+      });
+    }
+  }, [employmentItem]);
 
   const handleFormValuesChange = (changedValues) => {
     const editedFieldName = Object.keys(changedValues)[0];
-    setEmployment({
-      ...employment,
-      [editedFieldName]: changedValues[editedFieldName],
-    });
+    const formattedStartDate = moment(changedValues.start_date).format(
+      "YYYY-MM-DD"
+    );
+    const formattedEndDate = moment(changedValues.end_date).format(
+      "YYYY-MM-DD"
+    );
+    if (editedFieldName === "start_date" || editedFieldName === "end_date") {
+      setEmployment({
+        ...employment,
+        start_date: formattedStartDate,
+        end_date: formattedEndDate,
+      });
+    } else {
+      setEmployment({
+        ...employment,
+        [editedFieldName]: changedValues[editedFieldName],
+      });
+    }
   };
-
+  const deleteEmployment = async () => {
+    const response = await deleteApiWithAuth(
+      `employment/${employmentItem?.id}`
+    );
+    console.log("re=========", response);
+  };
+  const saveEmployment = async () => {
+    const response = await postApiWithAuth("employment/", employment);
+    console.log("re=========", response);
+  };
   return (
     <>
       <Form
@@ -105,8 +140,15 @@ const UserEmployment = ({ userData, employment, setEmployment }) => {
             </Form.Item>
           </Col>
         </Row>
-        <Button type="danger" icon={<DeleteOutlined />}>
+        <Button
+          type="danger"
+          icon={<DeleteOutlined />}
+          onClick={deleteEmployment}
+        >
           Delete
+        </Button>
+        <Button type="danger" onClick={saveEmployment}>
+          Save
         </Button>
       </Form>
     </>

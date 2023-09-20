@@ -18,6 +18,7 @@ const UserProfile = () => {
   const [employment, setEmployment] = useState({});
   const [education, setEducation] = useState({});
   const [updateUser, setUpdateUser] = useState({});
+  const [addEmployment, setAddEmployment] = useState(false);
 
   const highestEducation = [
     {
@@ -86,6 +87,10 @@ const UserProfile = () => {
   const userDataAPI = async () => {
     setisLoading(true);
     const response = await getApiWithAuth("profile");
+    console.log(
+      "=======================================",
+      response?.data?.employment_history
+    );
     setUserData(response?.data);
     form.setFieldsValue({
       first_name: response.data?.user?.first_name,
@@ -97,6 +102,7 @@ const UserProfile = () => {
       skills: response?.data?.skills,
       interested_jobs: response?.data?.interested_jobs,
       prior_highest_education: response?.data?.prior_highest_education,
+      employment_history: response?.data?.employment_history,
     });
     setisLoading(false);
     if (!response.success) {
@@ -135,15 +141,14 @@ const UserProfile = () => {
     userDataAPI();
   };
 
-  const handleAddEmployment = async () => {
-    const newEmployment = { id: employmentData.length + 1 };
-    setEmploymentData([...employmentData, newEmployment]);
-    const response = await postApiWithAuth("employment/", employment);
-    console.log("res=======", response);
+  const handleAddEmployment = () => {
+    setAddEmployment(true);
+    // const newEmployment = { id: employmentData.length + 1 };
+    // setEmploymentData([...employmentData, newEmployment]);
   };
   const handleAddEducation = () => {
-    const newEducation = { id: educationData.length + 1 };
-    setEducationData([...educationData, newEducation]);
+    // const newEducation = { id: educationData.length + 1 };
+    // setEducationData([...educationData, newEducation]);
   };
   return (
     <>
@@ -265,7 +270,7 @@ const UserProfile = () => {
                 ]}
               >
                 <Select placeholder="Select highest education">
-                  {highestEducation.map((edu) => (
+                  {highestEducation?.map((edu) => (
                     <Select.Option key={edu.id} value={edu.id}>
                       {edu.name}
                     </Select.Option>
@@ -287,7 +292,7 @@ const UserProfile = () => {
                 ]}
               >
                 <Select mode="multiple" placeholder="Select skills">
-                  {skillList.map((skill) => (
+                  {skillList?.map((skill) => (
                     <Select.Option key={skill.id} value={skill.id}>
                       {skill.name}
                     </Select.Option>
@@ -309,7 +314,7 @@ const UserProfile = () => {
                 ]}
               >
                 <Select mode="multiple" placeholder="Select jobs">
-                  {jobList.map((job) => (
+                  {jobList?.map((job) => (
                     <Select.Option key={job.id} value={job.id}>
                       {job.name}
                     </Select.Option>
@@ -330,14 +335,23 @@ const UserProfile = () => {
         </Form>
       </div>
       <h1 className="headingStyle">Employment Data</h1>
-      {employmentData.map((emp) => (
-        <UserEmployment
-          key={emp.id}
-          userData={userData}
-          employment={employment}
-          setEmployment={setEmployment}
-        />
-      ))}
+      {userData?.employment_history?.length === 0
+        ? ""
+        : userData?.employment_history?.map((employmentItem, index) => (
+            <UserEmployment
+              key={index}
+              userData={userData}
+              employment={employment}
+              setEmployment={setEmployment}
+              employmentItem={employmentItem}
+            />
+          ))}
+      <UserEmployment
+        key={1}
+        userData={userData}
+        employment={employment}
+        setEmployment={setEmployment}
+      />
       <div
         style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
       >
@@ -345,10 +359,24 @@ const UserProfile = () => {
           Add Employment +
         </Button>
       </div>
-      <h1 className="headingStyle">Educational Data</h1>
-      {educationData.map((education) => (
-        <UserEducation key={education.id} userData={userData} />
-      ))}
+      <h1 className="headingStyle">Education Data</h1>
+      {userData?.education_history?.length === 0
+        ? ""
+        : userData?.education_history?.map((educationItem, index) => (
+            <UserEducation
+              key={index}
+              userData={userData}
+              education={education}
+              setEducation={setEducation}
+              educationItem={educationItem}
+            />
+          ))}
+      <UserEducation
+        key={2}
+        userData={userData}
+        education={education}
+        setEducation={setEducation}
+      />
       <div
         style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
       >
