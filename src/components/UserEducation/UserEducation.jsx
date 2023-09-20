@@ -14,6 +14,8 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { deleteApiWithAuth, postApiWithAuth } from "../utilis/api";
 import moment from "moment";
 import { LoadingOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
+
 const antIcon = (
   <LoadingOutlined
     style={{
@@ -45,8 +47,8 @@ const UserEducation = ({
       form.setFieldsValue({
         university_name: educationItem.university_name,
         major: educationItem.major,
-        // start_date: educationItem.start_date,
-        // end_date: educationItem.end_date,
+        start_date: dayjs(new Date(educationItem.start_date)),
+        end_date: dayjs(new Date(educationItem.end_date)),
         degree_type: educationItem.degree_type,
       });
     }
@@ -219,13 +221,17 @@ const UserEducation = ({
         ) : (
           ""
         )}
-        <Button type="primary" onClick={saveEducation}>
-          {isLoading ? (
-            <Spin indicator={antIcon} style={{ color: "white" }} />
-          ) : (
-            <>Save</>
-          )}
-        </Button>
+        {newEdu ? (
+          <Button type="primary" onClick={saveEducation}>
+            {isLoading ? (
+              <Spin indicator={antIcon} style={{ color: "white" }} />
+            ) : (
+              <>Save</>
+            )}
+          </Button>
+        ) : (
+          ""
+        )}
       </Form>
     </>
   );

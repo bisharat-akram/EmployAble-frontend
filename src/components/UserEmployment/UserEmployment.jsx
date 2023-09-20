@@ -17,6 +17,8 @@ import {
 } from "../utilis/api";
 import moment from "moment";
 import { LoadingOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
+
 const antIcon = (
   <LoadingOutlined
     style={{
@@ -38,15 +40,12 @@ const UserEmployment = ({
 
   useEffect(() => {
     if (employmentItem) {
+      console.log("------------", employmentItem.start_date);
       form.setFieldsValue({
         employer_name: employmentItem.employer_name,
         position: employmentItem.position,
-        // start_date: moment(employmentItem.start_date).format(
-        //   "YYYY-MM-DDTHH:mm:ss[Z]"
-        // ),
-        // end_date: moment(employmentItem.end_date).format(
-        //   "YYYY-MM-DDTHH:mm:ss[Z]"
-        // ),
+        start_date: dayjs(new Date(employmentItem?.start_date)),
+        end_date: dayjs(new Date(employmentItem.end_date)),
       });
     }
   }, [employmentItem]);
@@ -198,13 +197,17 @@ const UserEmployment = ({
         ) : (
           ""
         )}
-        <Button type="primary" onClick={saveEmployment}>
-          {isLoading ? (
-            <Spin indicator={antIcon} style={{ color: "white" }} />
-          ) : (
-            <>Save</>
-          )}
-        </Button>
+        {newEmp ? (
+          <Button type="primary" onClick={saveEmployment}>
+            {isLoading ? (
+              <Spin indicator={antIcon} style={{ color: "white" }} />
+            ) : (
+              <>Save</>
+            )}
+          </Button>
+        ) : (
+          ""
+        )}
       </Form>
     </>
   );
