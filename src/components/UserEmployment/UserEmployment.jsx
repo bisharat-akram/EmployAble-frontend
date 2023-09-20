@@ -52,17 +52,11 @@ const UserEmployment = ({
 
   const handleFormValuesChange = (changedValues) => {
     const editedFieldName = Object.keys(changedValues)[0];
-    const formattedStartDate = moment(changedValues.start_date).format(
-      "YYYY-MM-DD"
-    );
-    const formattedEndDate = moment(changedValues.end_date).format(
-      "YYYY-MM-DD"
-    );
     if (editedFieldName === "start_date" || editedFieldName === "end_date") {
+      const formattedDate = changedValues[editedFieldName].format("YYYY-MM-DD")
       setEmployment({
         ...employment,
-        start_date: formattedStartDate,
-        end_date: formattedEndDate,
+        [editedFieldName]: formattedDate
       });
     } else {
       setEmployment({
@@ -94,6 +88,14 @@ const UserEmployment = ({
   };
 
   const saveEmployment = async () => {
+    if ((new Date(employment.start_date)) > (new Date(employment.end_date))) {
+      notification.error({
+        message: "Error",
+        description: "End date should be greater than the start date",
+        placement: "topLeft",
+      });
+      return;
+    }
     setisLoading(true);
     const response = await postApiWithAuth("employment/", employment);
     setisLoading(false);
@@ -164,7 +166,7 @@ const UserEmployment = ({
                 },
               ]}
             >
-              <DatePicker className="editInputStyling" format="YYYY-MM-DD" />
+              <DatePicker className="editInputStyling" format="YYYY-MM-DD" disabledDate={ date => date.isAfter(new Date())}/>
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -177,7 +179,7 @@ const UserEmployment = ({
                 },
               ]}
             >
-              <DatePicker className="editInputStyling" format="YYYY-MM-DD" />
+              <DatePicker className="editInputStyling" format="YYYY-MM-DD" disabledDate={ date => date.isAfter(new Date())}/>
             </Form.Item>
           </Col>
         </Row>

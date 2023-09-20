@@ -56,17 +56,11 @@ const UserEducation = ({
 
   const handleFormValuesChange = (changedValues) => {
     const editedFieldName = Object.keys(changedValues)[0];
-    const formattedStartDate = moment(changedValues.start_date).format(
-      "YYYY-MM-DD"
-    );
-    const formattedEndDate = moment(changedValues.end_date).format(
-      "YYYY-MM-DD"
-    );
     if (editedFieldName === "start_date" || editedFieldName === "end_date") {
+      const formattedDate = changedValues[editedFieldName]?.format('YYYY-MM-DD');
       setEducation({
         ...education,
-        start_date: formattedStartDate,
-        end_date: formattedEndDate,
+        [editedFieldName]: formattedDate
       });
     } else {
       setEducation({
@@ -76,6 +70,14 @@ const UserEducation = ({
     }
   };
   const saveEducation = async () => {
+    if ((new Date(education.start_date)) > (new Date(education.end_date))) {
+      notification.error({
+        message: "Error",
+        description: "End date should be greater than the start date",
+        placement: "topLeft",
+      });
+      return;
+    }
     setisLoading(true);
     const response = await postApiWithAuth("education/", education);
     setisLoading(false);
@@ -166,7 +168,7 @@ const UserEducation = ({
                 },
               ]}
             >
-              <DatePicker className="editInputStyling" format="YYYY-MM-DD" />
+              <DatePicker className="editInputStyling" format="YYYY-MM-DD" disabledDate={ date => date.isAfter(new Date())}/>
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -179,7 +181,7 @@ const UserEducation = ({
                 },
               ]}
             >
-              <DatePicker className="editInputStyling" format="YYYY-MM-DD" />
+              <DatePicker className="editInputStyling" format="YYYY-MM-DD" disabledDate={ date => date.isAfter(new Date())}/>
             </Form.Item>
           </Col>
         </Row>
