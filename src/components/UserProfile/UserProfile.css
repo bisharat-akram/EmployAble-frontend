@@ -17,16 +17,17 @@
   padding: 5% 4%;
   margin-bottom: 2%;
 }
-.ant-select-selector {
-  height: 50px !important; /* Adjust the height as needed */
+/* Styling for single select */
+.ant-select:not(.ant-select-multiple) .ant-select-selector {
+  height: 50px !important;
+  padding-top: 10px !important;
 }
+
+/* Styling for multiple select */
+.ant-select.ant-select-multiple .ant-select-selector {
+  height: 50px !important;
+}
+
 .headingStyle {
   color: #f2f2f4;
 }
-/* .userProfileMainContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-image: url("../../assets/images/employAbleSignup.svg");
-} */
