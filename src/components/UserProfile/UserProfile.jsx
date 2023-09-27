@@ -14,6 +14,8 @@ import { getApiWithAuth } from "../utilis/api";
 import UserEmployment from "../UserEmployment";
 import UserEducation from "../UserEducation";
 import { patchApiWithAuth } from "../utilis/api";
+import { useNavigate } from "react-router";
+import { deleteToken } from "../utilis/localStorage";
 import "./UserProfile.css";
 
 import { LoadingOutlined } from "@ant-design/icons";
@@ -42,6 +44,7 @@ const UserProfile = () => {
   const [addNewEmp, setAddnewEmp] = useState(false);
   const [showcriminalValue, setShowCriminalValue] = useState(false);
   const [showEmployment, setShowEmployment] = useState(false);
+  const navigate = useNavigate();
 
   const highestEducation = [
     {
@@ -140,6 +143,7 @@ const UserProfile = () => {
       interested_jobs: response?.data?.interested_jobs,
       prior_highest_education: response?.data?.prior_highest_education,
       employment_history: response?.data?.employment_history,
+      criminal_conviction: response?.data?.criminal_conviction,
     });
     if (response?.data?.prior_highest_education > 2) {
       setHighestEduData(true);
@@ -182,11 +186,32 @@ const UserProfile = () => {
     userDataAPI();
   };
 
+  const handleLogoutSuccess = () => {
+    deleteToken();
+    navigate("/");
+  };
+
   return (
     <>
       {" "}
       <div style={{ width: "100%" }}>
-        <h1 className="headingStyle">User Profile</h1>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <h1 className="headingStyle">User Profile</h1>
+          </div>
+
+          <div>
+            <Button type="primary" onClick={handleLogoutSuccess}>
+              Logout
+            </Button>
+          </div>
+        </div>
         <Form
           className="userProfileContainer"
           form={form}
@@ -393,7 +418,7 @@ const UserProfile = () => {
           ) : (
             ""
           )}
-          {!showcriminalValue ? (
+          {!showcriminalValue && userData?.criminal_conviction == null ? (
             <Row gutter={[16, 16]}>
               <Col span={24}>
                 <div>
@@ -426,7 +451,7 @@ const UserProfile = () => {
             <Row gutter={[16, 16]}>
               <Col span={24}>
                 <Form.Item
-                  // name="skills"
+                  name="criminal_conviction"
                   label={
                     <span className="labelStyling">
                       What is the highest level of convictions?
@@ -467,7 +492,7 @@ const UserProfile = () => {
           ) : (
             ""
           )}
-          {!showEmployment ? (
+          {!showEmployment && userData?.employment_history?.length === 0 ? (
             <Row gutter={[16, 16]}>
               <Col span={24}>
                 <div>
