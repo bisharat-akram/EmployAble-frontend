@@ -8,6 +8,7 @@ import {
   Row,
   Col,
   Spin,
+  Radio,
 } from "antd";
 import { getApiWithAuth } from "../utilis/api";
 import UserEmployment from "../UserEmployment";
@@ -38,6 +39,10 @@ const UserProfile = () => {
   const [updateUser, setUpdateUser] = useState({});
   const [HighestEduData, setHighestEduData] = useState(false);
   const [addNewEdu, setAddnewEdu] = useState(false);
+  const [addNewEmp, setAddnewEmp] = useState(false);
+  const [showcriminalValue, setShowCriminalValue] = useState(false);
+  const [showEmployment, setShowEmployment] = useState(false);
+
   const highestEducation = [
     {
       id: 1,
@@ -50,6 +55,15 @@ const UserProfile = () => {
     { id: 6, name: "Master`s" },
     { id: 7, name: "Doctoral" },
   ];
+
+  const criminalRecord = [
+    {
+      id: 1,
+      name: "Misdemeanor",
+    },
+    { id: 2, name: "Felony" },
+  ];
+
   const jobListApi = async () => {
     setisLoading(true);
     const response = await getApiWithAuth("jobs");
@@ -260,15 +274,60 @@ const UserProfile = () => {
                 <Input.TextArea className="editInputStyling" rows={4} />
               </Form.Item>
             </Col>
-            <Col span={12}>
+            {/* <Col span={12}>
               <Form.Item
                 name="field_name"
                 label={<span className="labelStyling">Field Name</span>}
               >
                 <Input.TextArea className="editInputStyling" rows={4} />
               </Form.Item>
+            </Col> */}
+          </Row>
+          <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <Form.Item
+                name="skills"
+                label={<span className="labelStyling">Skills</span>}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select your skills",
+                  },
+                ]}
+              >
+                <Select mode="multiple" placeholder="Select skills">
+                  {skillList?.map((skill) => (
+                    <Select.Option key={skill.id} value={skill.id}>
+                      {skill.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
             </Col>
           </Row>
+          <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <Form.Item
+                name="interested_jobs"
+                label={<span className="labelStyling">Interested Jobs</span>}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select jobs",
+                  },
+                ]}
+              >
+                <Select mode="multiple" placeholder="Select jobs">
+                  {jobList?.map((job) => (
+                    <Select.Option key={job.id} value={job.id}>
+                      {job.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+
           <Row gutter={[16, 16]}>
             <Col span={24}>
               <Form.Item
@@ -323,6 +382,7 @@ const UserProfile = () => {
                   display: "flex",
                   width: "100%",
                   justifyContent: "flex-end",
+                  marginBottom: "15px",
                 }}
               >
                 <Button type="primary" onClick={() => setAddnewEdu(true)}>
@@ -333,52 +393,126 @@ const UserProfile = () => {
           ) : (
             ""
           )}
-
-          <Row gutter={[16, 16]}>
-            <Col span={24}>
-              <Form.Item
-                name="skills"
-                label={<span className="labelStyling">Skills</span>}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select your skills",
-                  },
-                ]}
+          {!showcriminalValue ? (
+            <Row gutter={[16, 16]}>
+              <Col span={24}>
+                <div>
+                  <div className="labelStyling">
+                    Do you have any criminal convictions?
+                  </div>
+                  <div style={{ marginTop: "10px", marginBottom: "10px" }}>
+                    <Radio.Group
+                      onChange={(e) => {
+                        console.log("---00", e.target.value);
+                        if (e.target.value == "true") {
+                          setShowCriminalValue(true);
+                        }
+                      }}
+                    >
+                      <Row>
+                        <Col span={12}>
+                          <Radio value="true">Yes</Radio>
+                        </Col>
+                        <Col span={12}>
+                          <Radio value="false">No</Radio>
+                        </Col>
+                      </Row>
+                    </Radio.Group>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+          ) : (
+            <Row gutter={[16, 16]}>
+              <Col span={24}>
+                <Form.Item
+                  // name="skills"
+                  label={
+                    <span className="labelStyling">
+                      What is the highest level of convictions?
+                    </span>
+                  }
+                >
+                  <Select placeholder="Select ">
+                    {criminalRecord?.map((cri) => (
+                      <Select.Option key={cri.id} value={cri.id}>
+                        {cri.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
+          )}
+          {userData?.employment_history?.length === 0
+            ? ""
+            : userData?.employment_history?.map((employmentItem, index) => (
+                <UserEmployment
+                  key={index}
+                  employment={employment}
+                  setEmployment={setEmployment}
+                  employmentItem={employmentItem}
+                  userDataAPI={userDataAPI}
+                  newEmp={false}
+                />
+              ))}
+          {addNewEmp ? (
+            <UserEmployment
+              key={1}
+              employment={employment}
+              setEmployment={setEmployment}
+              userDataAPI={userDataAPI}
+              newEmp={true}
+            />
+          ) : (
+            ""
+          )}
+          {!showEmployment ? (
+            <Row gutter={[16, 16]}>
+              <Col span={24}>
+                <div>
+                  <div className="labelStyling">
+                    Do you have any prior employment experience?
+                  </div>
+                  <div style={{ marginTop: "10px", marginBottom: "10px" }}>
+                    <Radio.Group
+                      onChange={(e) => {
+                        console.log("---00", e.target.value);
+                        if (e.target.value == "true") {
+                          setShowEmployment(true);
+                        }
+                      }}
+                    >
+                      <Row>
+                        <Col span={12}>
+                          <Radio value="true">Yes</Radio>
+                        </Col>
+                        <Col span={12}>
+                          <Radio value="false">No</Radio>
+                        </Col>
+                      </Row>
+                    </Radio.Group>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+          ) : (
+            <Row gutter={[16, 16]}>
+              <Col
+                span={24}
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "flex-end",
+                  marginBottom: "15px",
+                }}
               >
-                <Select mode="multiple" placeholder="Select skills">
-                  {skillList?.map((skill) => (
-                    <Select.Option key={skill.id} value={skill.id}>
-                      {skill.name}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={[16, 16]}>
-            <Col span={24}>
-              <Form.Item
-                name="interested_jobs"
-                label={<span className="labelStyling">Interested Jobs</span>}
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select jobs",
-                  },
-                ]}
-              >
-                <Select mode="multiple" placeholder="Select jobs">
-                  {jobList?.map((job) => (
-                    <Select.Option key={job.id} value={job.id}>
-                      {job.name}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-
+                <Button type="primary" onClick={() => setAddnewEmp(true)}>
+                  Add employment +
+                </Button>
+              </Col>
+            </Row>
+          )}
           <Form.Item
             wrapperCol={{ span: 24 }}
             style={{ display: "flex", justifyContent: "flex-end" }}
