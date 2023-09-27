@@ -36,7 +36,8 @@ const UserProfile = () => {
   const [employment, setEmployment] = useState({});
   const [education, setEducation] = useState({});
   const [updateUser, setUpdateUser] = useState({});
-
+  const [HighestEduData, setHighestEduData] = useState(false);
+  const [addNewEdu, setAddnewEdu] = useState(false);
   const highestEducation = [
     {
       id: 1,
@@ -80,6 +81,13 @@ const UserProfile = () => {
   };
   const handleFormValuesChange = (changedValues) => {
     const editedFieldName = Object.keys(changedValues)[0];
+    if (editedFieldName === "prior_highest_education") {
+      if (changedValues[editedFieldName] > 2) {
+        setHighestEduData(true);
+      } else {
+        setHighestEduData(false);
+      }
+    }
     if (
       editedFieldName === "first_name" ||
       editedFieldName === "last_name" ||
@@ -119,6 +127,10 @@ const UserProfile = () => {
       prior_highest_education: response?.data?.prior_highest_education,
       employment_history: response?.data?.employment_history,
     });
+    if (response?.data?.prior_highest_education > 2) {
+      setHighestEduData(true);
+    }
+
     setisLoading(false);
     if (!response.success) {
       notification.error({
@@ -279,6 +291,49 @@ const UserProfile = () => {
               </Form.Item>
             </Col>
           </Row>
+          {userData?.education_history?.length === 0
+            ? ""
+            : userData?.education_history?.map((educationItem, index) => (
+                <UserEducation
+                  key={index}
+                  education={education}
+                  setEducation={setEducation}
+                  educationItem={educationItem}
+                  userDataAPI={userDataAPI}
+                  newEdu={false}
+                />
+              ))}
+          {addNewEdu ? (
+            <UserEducation
+              key={2}
+              education={education}
+              setEducation={setEducation}
+              userDataAPI={userDataAPI}
+              setAddnewEdu={setAddnewEdu}
+              newEdu={true}
+            />
+          ) : (
+            ""
+          )}
+          {HighestEduData ? (
+            <Row gutter={[16, 16]}>
+              <Col
+                span={24}
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <Button type="primary" onClick={() => setAddnewEdu(true)}>
+                  Add education +
+                </Button>
+              </Col>
+            </Row>
+          ) : (
+            ""
+          )}
+
           <Row gutter={[16, 16]}>
             <Col span={24}>
               <Form.Item
@@ -339,46 +394,6 @@ const UserProfile = () => {
           </Form.Item>
         </Form>
       </div>
-      <h1 className="headingStyle">Employment Data</h1>
-      {userData?.employment_history?.length === 0
-        ? ""
-        : userData?.employment_history?.map((employmentItem, index) => (
-            <UserEmployment
-              key={index}
-              employment={employment}
-              setEmployment={setEmployment}
-              employmentItem={employmentItem}
-              userDataAPI={userDataAPI}
-              newEmp={false}
-            />
-          ))}
-      <UserEmployment
-        key={1}
-        employment={employment}
-        setEmployment={setEmployment}
-        userDataAPI={userDataAPI}
-        newEmp={true}
-      />
-      <h1 className="headingStyle">Education Data</h1>
-      {userData?.education_history?.length === 0
-        ? ""
-        : userData?.education_history?.map((educationItem, index) => (
-            <UserEducation
-              key={index}
-              education={education}
-              setEducation={setEducation}
-              educationItem={educationItem}
-              userDataAPI={userDataAPI}
-              newEdu={false}
-            />
-          ))}
-      <UserEducation
-        key={2}
-        education={education}
-        setEducation={setEducation}
-        userDataAPI={userDataAPI}
-        newEdu={true}
-      />
     </>
   );
 };

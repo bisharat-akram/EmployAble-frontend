@@ -32,6 +32,7 @@ const UserEducation = ({
   setEducation,
   educationItem,
   userDataAPI,
+  setAddnewEdu,
 }) => {
   const [form] = Form.useForm();
   const [isDeleteLoading, setisDeleteLoading] = useState(false);
@@ -57,10 +58,11 @@ const UserEducation = ({
   const handleFormValuesChange = (changedValues) => {
     const editedFieldName = Object.keys(changedValues)[0];
     if (editedFieldName === "start_date" || editedFieldName === "end_date") {
-      const formattedDate = changedValues[editedFieldName]?.format('YYYY-MM-DD');
+      const formattedDate =
+        changedValues[editedFieldName]?.format("YYYY-MM-DD");
       setEducation({
         ...education,
-        [editedFieldName]: formattedDate
+        [editedFieldName]: formattedDate,
       });
     } else {
       setEducation({
@@ -70,7 +72,7 @@ const UserEducation = ({
     }
   };
   const saveEducation = async () => {
-    if ((new Date(education.start_date)) > (new Date(education.end_date))) {
+    if (new Date(education.start_date) > new Date(education.end_date)) {
       notification.error({
         message: "Error",
         description: "End date should be greater than the start date",
@@ -89,6 +91,7 @@ const UserEducation = ({
       });
       return;
     }
+    setAddnewEdu(false);
     notification.success({
       message: "Success",
       description: "Updated Successfully",
@@ -168,7 +171,11 @@ const UserEducation = ({
                 },
               ]}
             >
-              <DatePicker className="editInputStyling" format="YYYY-MM-DD" disabledDate={ date => date.isAfter(new Date())}/>
+              <DatePicker
+                className="editInputStyling"
+                format="YYYY-MM-DD"
+                disabledDate={(date) => date.isAfter(new Date())}
+              />
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -181,7 +188,11 @@ const UserEducation = ({
                 },
               ]}
             >
-              <DatePicker className="editInputStyling" format="YYYY-MM-DD" disabledDate={ date => date.isAfter(new Date())}/>
+              <DatePicker
+                className="editInputStyling"
+                format="YYYY-MM-DD"
+                disabledDate={(date) => date.isAfter(new Date())}
+              />
             </Form.Item>
           </Col>
         </Row>
