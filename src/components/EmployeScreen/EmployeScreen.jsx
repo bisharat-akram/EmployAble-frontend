@@ -14,7 +14,20 @@ const EmployeScreen = () => {
   const navigate = useNavigate();
   const [employeeInfo, setEmployeeInfo] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [tableData, setTableData] = useState([]);
+  const [jobList, setJobList] = useState([]);
+  const [skillList, setSkillList] = useState([]);
+  const highestEducation = [
+    {
+      id: 1,
+      name: "Less than GED",
+    },
+    { id: 2, name: "GED" },
+    { id: 3, name: "Some college" },
+    { id: 4, name: "Associate`s" },
+    { id: 5, name: "Bachelor`s" },
+    { id: 6, name: "Master`s" },
+    { id: 7, name: "Doctoral" },
+  ];
   const columns = [
     {
       title: "First Name",
@@ -79,10 +92,37 @@ const EmployeScreen = () => {
       return;
     }
   };
+
+  const jobListApi = async () => {
+    const response = await getApiWithAuth("jobs");
+    setJobList(response?.data);
+    if (!response.success) {
+      notification.error({
+        message: "Error",
+        description: response.message?.data?.error,
+        placement: "topLeft",
+      });
+      return;
+    }
+  };
+
+  const skillListApi = async () => {
+    const response = await getApiWithAuth("skills");
+    setSkillList(response?.data);
+    if (!response.success) {
+      notification.error({
+        message: "Error",
+        description: response.message?.data?.error,
+        placement: "topLeft",
+      });
+      return;
+    }
+  };
   useEffect(() => {
     getProfileData();
+    skillListApi();
+    jobListApi();
   }, []);
-
   const handleLogoutSuccess = () => {
     console.log("User logged out successfully");
     deleteToken();
@@ -120,37 +160,45 @@ const EmployeScreen = () => {
               <div className="dropdown">
                 <div className="labelStyling">Skills</div>
                 <Select
-                  placeholder="Select Type"
+                  mode="multiple"
+                  placeholder="Select skills"
                   onChange={(value) => handleSelectChange(value, "Type")}
                   style={{ width: 300, marginTop: 10 }}
                 >
-                  <Option value="type1">Type 1</Option>
-                  <Option value="type2">Type 2</Option>
-                  {/* ...other options */}
+                  {skillList?.map((skill) => (
+                    <Select.Option key={skill.id} value={skill.id}>
+                      {skill.name}
+                    </Select.Option>
+                  ))}
                 </Select>
               </div>
               <div className="dropdown">
                 <div className="labelStyling">Interested Jobs</div>
                 <Select
-                  placeholder="Select Type"
+                  mode="multiple"
+                  placeholder="Select jobs"
                   onChange={(value) => handleSelectChange(value, "Type")}
                   style={{ width: 300, marginTop: 10 }}
                 >
-                  <Option value="type1">Type 1</Option>
-                  <Option value="type2">Type 2</Option>
-                  {/* ...other options */}
+                  {jobList?.map((job) => (
+                    <Select.Option key={job.id} value={job.id}>
+                      {job.name}
+                    </Select.Option>
+                  ))}
                 </Select>
               </div>
               <div className="dropdown">
                 <div className="labelStyling">Highest Education Level</div>
                 <Select
-                  placeholder="Select Type"
+                  placeholder="Select education"
                   onChange={(value) => handleSelectChange(value, "Type")}
                   style={{ width: 300, marginTop: 10 }}
                 >
-                  <Option value="type1">Type 1</Option>
-                  <Option value="type2">Type 2</Option>
-                  {/* ...other options */}
+                  {highestEducation?.map((edu) => (
+                    <Select.Option key={edu.id} value={edu.id}>
+                      {edu.name}
+                    </Select.Option>
+                  ))}
                 </Select>
               </div>
             </div>
