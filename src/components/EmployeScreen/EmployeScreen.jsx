@@ -4,7 +4,15 @@ import { deleteToken } from "../utilis/localStorage";
 import "./EmployeScreen.css";
 import { getApiWithAuth } from "../utilis/api";
 import { useEffect, useState } from "react";
-import { Descriptions, notification, Modal, Select, Input, Table } from "antd";
+import {
+  Descriptions,
+  notification,
+  Modal,
+  Select,
+  Input,
+  Table,
+  Button,
+} from "antd";
 
 const { Option } = Select;
 const { Search } = Input;
@@ -154,8 +162,23 @@ const EmployeScreen = () => {
   return (
     <>
       <div className="EmployeeScreenContainer">
-        <div>
-          <h1 className="headingStyle">Employee Info</h1>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
+          <div>
+            <h1 className="headingStyle">Employee Info</h1>
+          </div>
+
+          <div>
+            <Button type="primary" onClick={handleLogoutSuccess}>
+              Logout
+            </Button>
+          </div>
         </div>
         <div className="EmployeMainContainer">
           <div className="EmployeFilterContainer">
@@ -227,6 +250,14 @@ const EmployeScreen = () => {
                     </Select.Option>
                   ))}
                 </Select>
+              </div>
+              <div className="dropdown">
+                <div className="labelStyling">Education</div>
+                <Input
+                  placeholder="Enter some text"
+                  style={{ width: 400, marginTop: 10, height: "50px" }}
+                  name="education"
+                />
               </div>
             </div>
           </div>
