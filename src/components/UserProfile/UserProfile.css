@@ -1,0 +1,33 @@
+.editInputStyling {
+  height: 50px;
+  width: 350px;
+}
+.labelStyling {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: left;
+}
+.userProfileContainer {
+  background-color: #f2f2f4;
+  border: 2px solid grey;
+  border-radius: 10px;
+  width: 100%;
+  padding: 5% 4%;
+  margin-bottom: 2%;
+}
+/* Styling for single select */
+.ant-select:not(.ant-select-multiple) .ant-select-selector {
+  height: 50px !important;
+  padding-top: 10px !important;
+}
+
+/* Styling for multiple select */
+.ant-select.ant-select-multiple .ant-select-selector {
+  height: 50px !important;
+}
+
+.headingStyle {
+  color: #f2f2f4;
+}

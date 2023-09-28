@@ -1,0 +1,38 @@
+.EmployeeScreenContainer {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  padding: 0% 5%;
+  background-image: url("../../assets/images/employAbleSignup.svg");
+  height: 100vh;
+}
+.EmployeDetailContainer {
+  background-color: #f2f2f4;
+  border: 2px solid grey;
+  border-radius: 10px;
+  width: 30%;
+  height: 80vh;
+  padding: 2%;
+}
+.EmployeFilterContainer {
+  background-color: #f2f2f4;
+  border: 2px solid grey;
+  border-radius: 10px;
+  width: 70%;
+  height: 80vh;
+  padding: 2%;
+}
+.EmployeMainContainer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.searchContainer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1%;
+}
+.dropdown {
+  margin: 10px;
+}
