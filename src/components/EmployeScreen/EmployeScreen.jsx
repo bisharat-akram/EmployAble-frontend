@@ -60,7 +60,17 @@ const EmployeScreen = () => {
     },
   ];
 
-  const showModal = () => {
+  const showModal = async (id) => {
+    const res = await getApiWithAuth(`profiles/${id}`);
+    console.log("hello--------", res);
+    if (!res.success) {
+      notification.error({
+        message: "Error",
+        description: res.message?.data?.error,
+        placement: "topLeft",
+      });
+      return;
+    }
     setIsModalVisible(true);
   };
 
@@ -161,7 +171,7 @@ const EmployeScreen = () => {
               bordered
               pagination={{ pageSize: 10 }}
               onRow={(record) => ({
-                onClick: () => showModal(record),
+                onClick: () => showModal(record.id),
               })}
             />
           </div>
