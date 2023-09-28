@@ -16,6 +16,8 @@ const EmployeScreen = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [jobList, setJobList] = useState([]);
   const [skillList, setSkillList] = useState([]);
+  const [filters, setFilters] = useState({});
+
   const highestEducation = [
     {
       id: 1,
@@ -72,15 +74,26 @@ const EmployeScreen = () => {
   };
 
   const handleSelectChange = (value, type) => {
-    console.log(`Selected ${type}:`, value);
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [type]: value,
+    }));
   };
-
   const handleSearch = (value) => {
-    console.log("Search term:", value);
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      ["search"]: value,
+    }));
   };
 
-  const getProfileData = async () => {
-    const res = await getApiWithAuth("profiles");
+  const getProfileData = async (value, type) => {
+    const queryString = Object.keys(filters)
+      .map((key) => `${key}=${filters[key]}`)
+      .join("&");
+    const url = `profiles?${queryString}`;
+    const res = await getApiWithAuth(url);
+    console.log("======>", url);
+    console.log("======>", url);
     setEmployeeInfo(res?.data);
     console.log("========res", res.data);
     if (!res.success) {
@@ -119,10 +132,12 @@ const EmployeScreen = () => {
     }
   };
   useEffect(() => {
-    getProfileData();
     skillListApi();
     jobListApi();
   }, []);
+  useEffect(() => {
+    getProfileData();
+  }, [filters]);
   const handleLogoutSuccess = () => {
     console.log("User logged out successfully");
     deleteToken();
@@ -162,8 +177,8 @@ const EmployeScreen = () => {
                 <Select
                   mode="multiple"
                   placeholder="Select skills"
-                  onChange={(value) => handleSelectChange(value, "Type")}
-                  style={{ width: 300, marginTop: 10 }}
+                  onChange={(value) => handleSelectChange(value, "skills")}
+                  style={{ width: 400, marginTop: 10 }}
                 >
                   {skillList?.map((skill) => (
                     <Select.Option key={skill.id} value={skill.id}>
@@ -177,8 +192,10 @@ const EmployeScreen = () => {
                 <Select
                   mode="multiple"
                   placeholder="Select jobs"
-                  onChange={(value) => handleSelectChange(value, "Type")}
-                  style={{ width: 300, marginTop: 10 }}
+                  onChange={(value) =>
+                    handleSelectChange(value, "interested_jobs")
+                  }
+                  style={{ width: 400, marginTop: 10 }}
                 >
                   {jobList?.map((job) => (
                     <Select.Option key={job.id} value={job.id}>
@@ -191,8 +208,10 @@ const EmployeScreen = () => {
                 <div className="labelStyling">Highest Education Level</div>
                 <Select
                   placeholder="Select education"
-                  onChange={(value) => handleSelectChange(value, "Type")}
-                  style={{ width: 300, marginTop: 10 }}
+                  onChange={(value) =>
+                    handleSelectChange(value, "prior_highest_education")
+                  }
+                  style={{ width: 400, marginTop: 10 }}
                 >
                   {highestEducation?.map((edu) => (
                     <Select.Option key={edu.id} value={edu.id}>
@@ -211,8 +230,10 @@ const EmployeScreen = () => {
           footer={null}
         >
           <Descriptions bordered column={1}>
-            <Descriptions.Item label="Name">Ali</Descriptions.Item>
-            <Descriptions.Item label="Email">ali@gmail.com</Descriptions.Item>
+            <Descriptions.Item label="Highest Education">Ali</Descriptions.Item>
+            <Descriptions.Item label="Interested Jobs">
+              ali@gmail.com
+            </Descriptions.Item>
             <Descriptions.Item label="Phone Number">00000</Descriptions.Item>
           </Descriptions>
         </Modal>
