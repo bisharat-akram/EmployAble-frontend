@@ -203,6 +203,7 @@ const EmployeScreen = () => {
                 onClick: () => showModal(record.id),
               })}
               loading={isLoading}
+              style={{ cursor: "pointer" }}
             />
           </div>
           <div className="EmployeDetailContainer">
