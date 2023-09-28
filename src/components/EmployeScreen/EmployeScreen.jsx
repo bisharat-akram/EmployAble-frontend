@@ -12,6 +12,7 @@ import {
   Input,
   Table,
   Button,
+  Spin,
 } from "antd";
 
 const { Option } = Select;
@@ -21,6 +22,8 @@ const EmployeScreen = () => {
   const navigate = useNavigate();
   const [employeeInfo, setEmployeeInfo] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
+  const [isLoadingModal, setisLoadingModal] = useState(false);
   const [jobList, setJobList] = useState([]);
   const [skillList, setSkillList] = useState([]);
   const [detail, setDetail] = useState([]);
@@ -70,10 +73,11 @@ const EmployeScreen = () => {
   ];
 
   const showModal = async (id) => {
+    setisLoadingModal(true);
     const res = await getApiWithAuth(`profiles/${id}`);
-    console.log("hello--------", res);
     setDetail(res?.data);
     if (!res.success) {
+      setisLoadingModal(false);
       notification.error({
         message: "Error",
         description: res.message?.data?.error,
@@ -81,11 +85,8 @@ const EmployeScreen = () => {
       });
       return;
     }
+    setisLoadingModal(false);
     setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    setIsModalVisible(false);
   };
 
   const handleCancel = () => {
@@ -106,6 +107,7 @@ const EmployeScreen = () => {
   };
 
   const getProfileData = async (value, type) => {
+    setisLoading(true);
     const queryString = Object.keys(filters)
       .map((key) => `${key}=${filters[key]}`)
       .join("&");
@@ -113,6 +115,7 @@ const EmployeScreen = () => {
     const res = await getApiWithAuth(url);
     setEmployeeInfo(res?.data);
     if (!res.success) {
+      setisLoading(false);
       notification.error({
         message: "Error",
         description: res.message?.data?.error,
@@ -120,6 +123,7 @@ const EmployeScreen = () => {
       });
       return;
     }
+    setisLoading(false);
   };
 
   const jobListApi = async () => {
@@ -198,6 +202,7 @@ const EmployeScreen = () => {
               onRow={(record) => ({
                 onClick: () => showModal(record.id),
               })}
+              loading={isLoading}
             />
           </div>
           <div className="EmployeDetailContainer">
@@ -268,76 +273,91 @@ const EmployeScreen = () => {
           onCancel={handleCancel}
           footer={null}
         >
-          <Descriptions bordered column={1}>
-            <Descriptions.Item label="First Name">
-              {detail?.user?.first_name}
-            </Descriptions.Item>
-            <Descriptions.Item label="Last Name">
-              {detail?.user?.last_name}
-            </Descriptions.Item>
-            <Descriptions.Item label="User Name">
-              {detail?.user?.username}
-            </Descriptions.Item>
-            <Descriptions.Item label="Phone Number">
-              {detail?.phone_number}
-            </Descriptions.Item>
-            <Descriptions.Item label="Criminal Conviction">
-              {detail?.criminal_conviction}
-            </Descriptions.Item>
-            <Descriptions.Item label="Prior Highest Education">
-              {detail?.prior_highest_education}
-            </Descriptions.Item>
-            <Descriptions.Item label="Email">
-              {detail?.user?.email}
-            </Descriptions.Item>
-            <Descriptions.Item label="Description">
-              {detail?.description}
-            </Descriptions.Item>
-          </Descriptions>
-          <h3>Skills</h3>
-          {detail?.skills?.map((data, i) => (
-            <Descriptions bordered column={1}>
-              <Descriptions.Item label={i + 1}>{data?.name}</Descriptions.Item>
-            </Descriptions>
-          ))}
-          <h3>Interested Jobs</h3>
-          {detail?.interested_jobs?.map((data, i) => (
-            <Descriptions bordered column={1}>
-              <Descriptions.Item label={i + 1}>{data?.name}</Descriptions.Item>
-            </Descriptions>
-          ))}
-          <h3>Education History</h3>
-          {detail?.education_history?.map((data, i) => (
-            <Descriptions bordered column={1}>
-              <Descriptions.Item label="Major">{data?.major}</Descriptions.Item>
-              <Descriptions.Item label="University Name">
-                {data?.university_name}
-              </Descriptions.Item>
-              <Descriptions.Item label="Start Date">
-                {data?.start_date}
-              </Descriptions.Item>
-              <Descriptions.Item label="End Date">
-                {data?.end_date}
-              </Descriptions.Item>
-            </Descriptions>
-          ))}
-          <h3>Employment History</h3>
-          {detail?.employment_history?.map((data, i) => (
-            <Descriptions bordered column={1}>
-              <Descriptions.Item label="Employer Name">
-                {data?.employer_name}
-              </Descriptions.Item>
-              <Descriptions.Item label="Position">
-                {data?.position}
-              </Descriptions.Item>
-              <Descriptions.Item label="Start Date">
-                {data?.start_date}
-              </Descriptions.Item>
-              <Descriptions.Item label="End Date">
-                {data?.end_date}
-              </Descriptions.Item>
-            </Descriptions>
-          ))}
+          {isLoading ? (
+            <div style={{ textAlign: "center", padding: "20px" }}>
+              <Spin size="large" />{" "}
+              {/* Render a spinner if isLoading is true */}
+            </div>
+          ) : (
+            <>
+              <Descriptions bordered column={1}>
+                <Descriptions.Item label="First Name">
+                  {detail?.user?.first_name}
+                </Descriptions.Item>
+                <Descriptions.Item label="Last Name">
+                  {detail?.user?.last_name}
+                </Descriptions.Item>
+                <Descriptions.Item label="User Name">
+                  {detail?.user?.username}
+                </Descriptions.Item>
+                <Descriptions.Item label="Phone Number">
+                  {detail?.phone_number}
+                </Descriptions.Item>
+                <Descriptions.Item label="Criminal Conviction">
+                  {detail?.criminal_conviction}
+                </Descriptions.Item>
+                <Descriptions.Item label="Prior Highest Education">
+                  {detail?.prior_highest_education}
+                </Descriptions.Item>
+                <Descriptions.Item label="Email">
+                  {detail?.user?.email}
+                </Descriptions.Item>
+                <Descriptions.Item label="Description">
+                  {detail?.description}
+                </Descriptions.Item>
+              </Descriptions>
+              <h3>Skills</h3>
+              {detail?.skills?.map((data, i) => (
+                <Descriptions bordered column={1}>
+                  <Descriptions.Item label={i + 1}>
+                    {data?.name}
+                  </Descriptions.Item>
+                </Descriptions>
+              ))}
+              <h3>Interested Jobs</h3>
+              {detail?.interested_jobs?.map((data, i) => (
+                <Descriptions bordered column={1}>
+                  <Descriptions.Item label={i + 1}>
+                    {data?.name}
+                  </Descriptions.Item>
+                </Descriptions>
+              ))}
+              <h3>Education History</h3>
+              {detail?.education_history?.map((data, i) => (
+                <Descriptions bordered column={1}>
+                  <Descriptions.Item label="Major">
+                    {data?.major}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="University Name">
+                    {data?.university_name}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Start Date">
+                    {data?.start_date}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="End Date">
+                    {data?.end_date}
+                  </Descriptions.Item>
+                </Descriptions>
+              ))}
+              <h3>Employment History</h3>
+              {detail?.employment_history?.map((data, i) => (
+                <Descriptions bordered column={1}>
+                  <Descriptions.Item label="Employer Name">
+                    {data?.employer_name}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Position">
+                    {data?.position}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Start Date">
+                    {data?.start_date}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="End Date">
+                    {data?.end_date}
+                  </Descriptions.Item>
+                </Descriptions>
+              ))}
+            </>
+          )}
         </Modal>
       </div>
     </>
