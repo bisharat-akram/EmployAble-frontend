@@ -15,6 +15,7 @@ const EmployeScreen = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [jobList, setJobList] = useState([]);
   const [skillList, setSkillList] = useState([]);
+  const [detail, setDetail] = useState([]);
   const [filters, setFilters] = useState({});
 
   const highestEducation = [
@@ -63,6 +64,7 @@ const EmployeScreen = () => {
   const showModal = async (id) => {
     const res = await getApiWithAuth(`profiles/${id}`);
     console.log("hello--------", res);
+    setDetail(res?.data);
     if (!res.success) {
       notification.error({
         message: "Error",
@@ -236,12 +238,75 @@ const EmployeScreen = () => {
           footer={null}
         >
           <Descriptions bordered column={1}>
-            <Descriptions.Item label="Highest Education">Ali</Descriptions.Item>
-            <Descriptions.Item label="Interested Jobs">
-              ali@gmail.com
+            <Descriptions.Item label="First Name">
+              {detail?.user?.first_name}
             </Descriptions.Item>
-            <Descriptions.Item label="Phone Number">00000</Descriptions.Item>
+            <Descriptions.Item label="Last Name">
+              {detail?.user?.last_name}
+            </Descriptions.Item>
+            <Descriptions.Item label="User Name">
+              {detail?.user?.username}
+            </Descriptions.Item>
+            <Descriptions.Item label="Phone Number">
+              {detail?.phone_number}
+            </Descriptions.Item>
+            <Descriptions.Item label="Criminal Conviction">
+              {detail?.criminal_conviction}
+            </Descriptions.Item>
+            <Descriptions.Item label="Prior Highest Education">
+              {detail?.prior_highest_education}
+            </Descriptions.Item>
+            <Descriptions.Item label="Email">
+              {detail?.user?.email}
+            </Descriptions.Item>
+            <Descriptions.Item label="Description">
+              {detail?.description}
+            </Descriptions.Item>
           </Descriptions>
+          <h3>Skills</h3>
+          {detail?.skills?.map((data, i) => (
+            <Descriptions bordered column={1}>
+              <Descriptions.Item label={i + 1}>{data?.name}</Descriptions.Item>
+            </Descriptions>
+          ))}
+          <h3>Interested Jobs</h3>
+          {detail?.interested_jobs?.map((data, i) => (
+            <Descriptions bordered column={1}>
+              <Descriptions.Item label={i + 1}>{data?.name}</Descriptions.Item>
+            </Descriptions>
+          ))}
+          <h3>Education History</h3>
+          {detail?.education_history?.map((data, i) => (
+            <Descriptions bordered column={1}>
+              <Descriptions.Item label="Major">{data?.major}</Descriptions.Item>
+              <Descriptions.Item label="University Name">
+                {data?.university_name}
+              </Descriptions.Item>
+              <Descriptions.Item label="Start Date">
+                {data?.start_date}
+              </Descriptions.Item>
+              <Descriptions.Item label="End Date">
+                {data?.end_date}
+              </Descriptions.Item>
+            </Descriptions>
+          ))}
+          <h3>Employment History</h3>
+          {detail?.employment_history?.map((data, i) => (
+            <Descriptions bordered column={1}>
+              <Descriptions.Item label="Employer Name">
+                {data?.employer_name}
+              </Descriptions.Item>
+              <Descriptions.Item label="Position">
+                {data?.position}
+              </Descriptions.Item>
+              <Descriptions.Item label="Start Date">
+                {data?.start_date}
+              </Descriptions.Item>
+              <Descriptions.Item label="End Date">
+                {data?.end_date}
+              </Descriptions.Item>
+            </Descriptions>
+          ))}
         </Modal>
       </div>
     </>
