@@ -40,7 +40,6 @@ const UserEmployment = ({
 
   useEffect(() => {
     if (employmentItem) {
-      console.log("------------", employmentItem.start_date);
       form.setFieldsValue({
         employer_name: employmentItem.employer_name,
         position: employmentItem.position,
@@ -53,10 +52,10 @@ const UserEmployment = ({
   const handleFormValuesChange = (changedValues) => {
     const editedFieldName = Object.keys(changedValues)[0];
     if (editedFieldName === "start_date" || editedFieldName === "end_date") {
-      const formattedDate = changedValues[editedFieldName].format("YYYY-MM-DD")
+      const formattedDate = changedValues[editedFieldName].format("YYYY-MM-DD");
       setEmployment({
         ...employment,
-        [editedFieldName]: formattedDate
+        [editedFieldName]: formattedDate,
       });
     } else {
       setEmployment({
@@ -88,7 +87,7 @@ const UserEmployment = ({
   };
 
   const saveEmployment = async () => {
-    if ((new Date(employment.start_date)) > (new Date(employment.end_date))) {
+    if (new Date(employment.start_date) > new Date(employment.end_date)) {
       notification.error({
         message: "Error",
         description: "End date should be greater than the start date",
@@ -166,7 +165,11 @@ const UserEmployment = ({
                 },
               ]}
             >
-              <DatePicker className="editInputStyling" format="YYYY-MM-DD" disabledDate={ date => date.isAfter(new Date())}/>
+              <DatePicker
+                className="editInputStyling"
+                format="YYYY-MM-DD"
+                disabledDate={(date) => date.isAfter(new Date())}
+              />
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -179,7 +182,11 @@ const UserEmployment = ({
                 },
               ]}
             >
-              <DatePicker className="editInputStyling" format="YYYY-MM-DD" disabledDate={ date => date.isAfter(new Date())}/>
+              <DatePicker
+                className="editInputStyling"
+                format="YYYY-MM-DD"
+                disabledDate={(date) => date.isAfter(new Date())}
+              />
             </Form.Item>
           </Col>
         </Row>

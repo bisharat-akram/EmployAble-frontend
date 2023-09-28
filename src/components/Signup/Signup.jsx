@@ -56,7 +56,6 @@ const Signup = () => {
   };
 
   const onFinish = async (values) => {
-    console.log("Received values:", values);
     setisLoading(true);
     const response = await postApiWithoutAuth("signup/", data);
     setisLoading(false);

@@ -5,7 +5,6 @@ import "./EmployeScreen.css";
 import { getApiWithAuth } from "../utilis/api";
 import { useEffect, useState } from "react";
 import { Descriptions, notification, Modal, Select, Input, Table } from "antd";
-// import "antd/dist/antd.css";
 
 const { Option } = Select;
 const { Search } = Input;
@@ -92,10 +91,7 @@ const EmployeScreen = () => {
       .join("&");
     const url = `profiles?${queryString}`;
     const res = await getApiWithAuth(url);
-    console.log("======>", url);
-    console.log("======>", url);
     setEmployeeInfo(res?.data);
-    console.log("========res", res.data);
     if (!res.success) {
       notification.error({
         message: "Error",

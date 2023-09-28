@@ -428,7 +428,6 @@ const UserProfile = () => {
                   <div style={{ marginTop: "10px", marginBottom: "10px" }}>
                     <Radio.Group
                       onChange={(e) => {
-                        console.log("---00", e.target.value);
                         if (e.target.value == "true") {
                           setShowCriminalValue(true);
                         }
@@ -502,7 +501,6 @@ const UserProfile = () => {
                   <div style={{ marginTop: "10px", marginBottom: "10px" }}>
                     <Radio.Group
                       onChange={(e) => {
-                        console.log("---00", e.target.value);
                         if (e.target.value == "true") {
                           setShowEmployment(true);
                         }
