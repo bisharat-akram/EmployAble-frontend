@@ -138,7 +138,6 @@ const UserProfile = () => {
       email: response.data?.user?.email,
       phone_number: response.data?.phone_number,
       description: response.data?.description,
-      field_name: response?.data?.field_name,
       skills: response?.data?.skills,
       interested_jobs: response?.data?.interested_jobs,
       prior_highest_education: response?.data?.prior_highest_education,
@@ -299,14 +298,6 @@ const UserProfile = () => {
                 <Input.TextArea className="editInputStyling" rows={4} />
               </Form.Item>
             </Col>
-            {/* <Col span={12}>
-              <Form.Item
-                name="field_name"
-                label={<span className="labelStyling">Field Name</span>}
-              >
-                <Input.TextArea className="editInputStyling" rows={4} />
-              </Form.Item>
-            </Col> */}
           </Row>
           <Row gutter={[16, 16]}>
             <Col span={24}>
@@ -375,6 +366,13 @@ const UserProfile = () => {
               </Form.Item>
             </Col>
           </Row>
+          {userData?.education_history?.length > 0 ? (
+            <div className="labelStyling" style={{ marginBottom: "10px" }}>
+              Education History
+            </div>
+          ) : (
+            ""
+          )}
           {userData?.education_history?.length === 0
             ? ""
             : userData?.education_history?.map((educationItem, index) => (
@@ -388,14 +386,24 @@ const UserProfile = () => {
                 />
               ))}
           {addNewEdu ? (
-            <UserEducation
-              key={2}
-              education={education}
-              setEducation={setEducation}
-              userDataAPI={userDataAPI}
-              setAddnewEdu={setAddnewEdu}
-              newEdu={true}
-            />
+            <>
+              {" "}
+              {userData?.education_history?.length === 0 ? (
+                <div className="labelStyling" style={{ marginBottom: "10px" }}>
+                  Education History
+                </div>
+              ) : (
+                ""
+              )}
+              <UserEducation
+                key={2}
+                education={education}
+                setEducation={setEducation}
+                userDataAPI={userDataAPI}
+                setAddnewEdu={setAddnewEdu}
+                newEdu={true}
+              />
+            </>
           ) : (
             ""
           )}
@@ -428,7 +436,6 @@ const UserProfile = () => {
                   <div style={{ marginTop: "10px", marginBottom: "10px" }}>
                     <Radio.Group
                       onChange={(e) => {
-                        console.log("---00", e.target.value);
                         if (e.target.value == "true") {
                           setShowCriminalValue(true);
                         }
@@ -469,26 +476,44 @@ const UserProfile = () => {
               </Col>
             </Row>
           )}
+          {userData?.employment_history?.length > 0 ? (
+            <div className="labelStyling" style={{ marginBottom: "10px" }}>
+              Employment History
+            </div>
+          ) : (
+            ""
+          )}
           {userData?.employment_history?.length === 0
             ? ""
             : userData?.employment_history?.map((employmentItem, index) => (
-                <UserEmployment
-                  key={index}
-                  employment={employment}
-                  setEmployment={setEmployment}
-                  employmentItem={employmentItem}
-                  userDataAPI={userDataAPI}
-                  newEmp={false}
-                />
+                <>
+                  <UserEmployment
+                    key={index}
+                    employment={employment}
+                    setEmployment={setEmployment}
+                    employmentItem={employmentItem}
+                    userDataAPI={userDataAPI}
+                    newEmp={false}
+                  />
+                </>
               ))}
           {addNewEmp ? (
-            <UserEmployment
-              key={1}
-              employment={employment}
-              setEmployment={setEmployment}
-              userDataAPI={userDataAPI}
-              newEmp={true}
-            />
+            <>
+              {userData?.employment_history?.length === 0 ? (
+                <div className="labelStyling" style={{ marginBottom: "10px" }}>
+                  Employment History
+                </div>
+              ) : (
+                ""
+              )}
+              <UserEmployment
+                key={1}
+                employment={employment}
+                setEmployment={setEmployment}
+                userDataAPI={userDataAPI}
+                newEmp={true}
+              />
+            </>
           ) : (
             ""
           )}
@@ -502,7 +527,6 @@ const UserProfile = () => {
                   <div style={{ marginTop: "10px", marginBottom: "10px" }}>
                     <Radio.Group
                       onChange={(e) => {
-                        console.log("---00", e.target.value);
                         if (e.target.value == "true") {
                           setShowEmployment(true);
                         }
