@@ -13,6 +13,7 @@ export default function App() {
   const queryClient = new QueryClient()
 
   useEffect(() => {
+    document.title = 'Employable';
     const start = async () => {
       try {
         await gapi.client.init({

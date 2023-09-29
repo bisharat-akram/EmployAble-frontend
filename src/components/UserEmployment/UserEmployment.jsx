@@ -33,6 +33,7 @@ const UserEmployment = ({
   setEmployment,
   employmentItem,
   userDataAPI,
+  updateUserProfile = null
 }) => {
   const [form] = Form.useForm();
   const [isLoading, setisLoading] = useState(false);
@@ -65,6 +66,7 @@ const UserEmployment = ({
     }
   };
   const deleteEmployment = async () => {
+    updateUserProfile()
     setisDeleteLoading(true);
     const response = await deleteApiWithAuth(
       `employment/${employmentItem?.id}`
@@ -87,6 +89,7 @@ const UserEmployment = ({
   };
 
   const saveEmployment = async () => {
+    updateUserProfile()
     if (new Date(employment.start_date) > new Date(employment.end_date)) {
       notification.error({
         message: "Error",
