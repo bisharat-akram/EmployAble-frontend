@@ -33,14 +33,18 @@ const UserEducation = ({
   educationItem,
   userDataAPI,
   setAddnewEdu,
+  updateUserProfile = null
 }) => {
   const [form] = Form.useForm();
   const [isDeleteLoading, setisDeleteLoading] = useState(false);
   const [isLoading, setisLoading] = useState(false);
 
   const degreeType = [
-    { id: 1, name: "High School" },
-    { id: 2, name: "Bachelor’s" },
+    { id: 1, name: "Some college" },
+    { id: 2, name: "Associate`s" },
+    { id: 3, name: "Bachelor`s" },
+    { id: 4, name: "Master`s" },
+    { id: 5, name: "Doctoral" },
   ];
 
   useEffect(() => {
@@ -72,6 +76,7 @@ const UserEducation = ({
     }
   };
   const saveEducation = async () => {
+    updateUserProfile()
     if (new Date(education.start_date) > new Date(education.end_date)) {
       notification.error({
         message: "Error",
@@ -102,6 +107,7 @@ const UserEducation = ({
   };
 
   const deleteEducation = async () => {
+    updateUserProfile()
     setisDeleteLoading(true);
     const response = await deleteApiWithAuth(`education/${educationItem?.id}`);
     setisDeleteLoading(false);

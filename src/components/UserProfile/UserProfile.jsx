@@ -383,6 +383,7 @@ const UserProfile = () => {
                   educationItem={educationItem}
                   userDataAPI={userDataAPI}
                   newEdu={false}
+                  updateUserProfile={handleEditClick}
                 />
               ))}
           {addNewEdu ? (
@@ -402,6 +403,7 @@ const UserProfile = () => {
                 userDataAPI={userDataAPI}
                 setAddnewEdu={setAddnewEdu}
                 newEdu={true}
+                updateUserProfile={handleEditClick}
               />
             </>
           ) : (
@@ -494,6 +496,7 @@ const UserProfile = () => {
                     employmentItem={employmentItem}
                     userDataAPI={userDataAPI}
                     newEmp={false}
+                    updateUserProfile={handleEditClick}
                   />
                 </>
               ))}
@@ -512,6 +515,7 @@ const UserProfile = () => {
                 setEmployment={setEmployment}
                 userDataAPI={userDataAPI}
                 newEmp={true}
+                updateUserProfile={handleEditClick}
               />
             </>
           ) : (
