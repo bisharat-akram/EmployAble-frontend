@@ -13,6 +13,7 @@ import {
   Table,
   Button,
   Spin,
+  Tag,
 } from "antd";
 
 const { Option } = Select;
@@ -274,6 +275,7 @@ const EmployeScreen = () => {
           visible={isModalVisible}
           onCancel={handleCancel}
           footer={null}
+          width={900}
         >
           {isLoading ? (
             <div style={{ textAlign: "center", padding: "20px" }}>
@@ -282,78 +284,80 @@ const EmployeScreen = () => {
             </div>
           ) : (
             <>
-              <Descriptions bordered column={1}>
-                <Descriptions.Item label="First Name">
+              <Descriptions bordered column={1} labelStyle={{ width: "300px" }}>
+                <Descriptions.Item label="First Name" span={3}>
                   {detail?.user?.first_name}
                 </Descriptions.Item>
-                <Descriptions.Item label="Last Name">
+                <Descriptions.Item label="Last Name" span={3}>
                   {detail?.user?.last_name}
                 </Descriptions.Item>
-                <Descriptions.Item label="User Name">
+                <Descriptions.Item label="User Name" span={3}>
                   {detail?.user?.username}
                 </Descriptions.Item>
-                <Descriptions.Item label="Phone Number">
+                <Descriptions.Item label="Phone Number" span={3}>
                   {detail?.phone_number}
                 </Descriptions.Item>
-                <Descriptions.Item label="Criminal Conviction">
+                <Descriptions.Item label="Criminal Conviction" span={3}>
                   {detail?.criminal_conviction}
                 </Descriptions.Item>
-                <Descriptions.Item label="Prior Highest Education">
+                <Descriptions.Item label="Prior Highest Education" span={3}>
                   {detail?.prior_highest_education}
                 </Descriptions.Item>
-                <Descriptions.Item label="Email">
+                <Descriptions.Item label="Email" span={3}>
                   {detail?.user?.email}
                 </Descriptions.Item>
-                <Descriptions.Item label="Description">
+                <Descriptions.Item label="Description" span={3}>
                   {detail?.description}
                 </Descriptions.Item>
               </Descriptions>
               <h3>Skills</h3>
               {detail?.skills?.map((data, i) => (
-                <Descriptions bordered column={1}>
-                  <Descriptions.Item label={i + 1}>
-                    {data?.name}
-                  </Descriptions.Item>
-                </Descriptions>
+                <Tag>{data?.name}</Tag>
               ))}
               <h3>Interested Jobs</h3>
               {detail?.interested_jobs?.map((data, i) => (
-                <Descriptions bordered column={1}>
-                  <Descriptions.Item label={i + 1}>
-                    {data?.name}
-                  </Descriptions.Item>
-                </Descriptions>
+                <Tag>{data?.name}</Tag>
               ))}
               <h3>Education History</h3>
               {detail?.education_history?.map((data, i) => (
-                <Descriptions bordered column={1}>
-                  <Descriptions.Item label="Major">
+                <Descriptions
+                  bordered
+                  column={1}
+                  style={{ marginBottom: "20px" }}
+                  labelStyle={{ width: "300px" }}
+                >
+                  <Descriptions.Item label="Major" span={3}>
                     {data?.major}
                   </Descriptions.Item>
-                  <Descriptions.Item label="University Name">
+                  <Descriptions.Item label="University Name" span={3}>
                     {data?.university_name}
                   </Descriptions.Item>
-                  <Descriptions.Item label="Start Date">
+                  <Descriptions.Item label="Start Date" span={3}>
                     {data?.start_date}
                   </Descriptions.Item>
-                  <Descriptions.Item label="End Date">
+                  <Descriptions.Item label="End Date" span={3}>
                     {data?.end_date}
                   </Descriptions.Item>
                 </Descriptions>
               ))}
               <h3>Employment History</h3>
               {detail?.employment_history?.map((data, i) => (
-                <Descriptions bordered column={1}>
-                  <Descriptions.Item label="Employer Name">
+                <Descriptions
+                  bordered
+                  column={1}
+                  style={{ marginBottom: "20px" }}
+                  labelStyle={{ width: "300px" }}
+                >
+                  <Descriptions.Item label="Employer Name" span={3}>
                     {data?.employer_name}
                   </Descriptions.Item>
-                  <Descriptions.Item label="Position">
+                  <Descriptions.Item label="Position" span={3}>
                     {data?.position}
                   </Descriptions.Item>
-                  <Descriptions.Item label="Start Date">
+                  <Descriptions.Item label="Start Date" span={3}>
                     {data?.start_date}
                   </Descriptions.Item>
-                  <Descriptions.Item label="End Date">
+                  <Descriptions.Item label="End Date" span={3}>
                     {data?.end_date}
                   </Descriptions.Item>
                 </Descriptions>
