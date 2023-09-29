@@ -175,7 +175,7 @@ const EmployeScreen = () => {
           }}
         >
           <div>
-            <h1 className="headingStyle">Employee Info</h1>
+            <h1 className="headingStyle">Clients List</h1>
           </div>
 
           <div>
@@ -215,7 +215,7 @@ const EmployeScreen = () => {
                   mode="multiple"
                   placeholder="Select skills"
                   onChange={(value) => handleSelectChange(value, "skills")}
-                  style={{ width: 400, marginTop: 10 }}
+                  style={{ width: 380, marginTop: 10 }}
                 >
                   {skillList?.map((skill) => (
                     <Select.Option key={skill.id} value={skill.id}>
@@ -232,7 +232,7 @@ const EmployeScreen = () => {
                   onChange={(value) =>
                     handleSelectChange(value, "interested_jobs")
                   }
-                  style={{ width: 400, marginTop: 10 }}
+                  style={{ width: 380, marginTop: 10 }}
                 >
                   {jobList?.map((job) => (
                     <Select.Option key={job.id} value={job.id}>
@@ -248,7 +248,7 @@ const EmployeScreen = () => {
                   onChange={(value) =>
                     handleSelectChange(value, "prior_highest_education")
                   }
-                  style={{ width: 400, marginTop: 10 }}
+                  style={{ width: 380, marginTop: 10 }}
                 >
                   {highestEducation?.map((edu) => (
                     <Select.Option key={edu.id} value={edu.id}>
@@ -260,8 +260,9 @@ const EmployeScreen = () => {
               <div className="dropdown">
                 <div className="labelStyling">Education</div>
                 <Input
-                  placeholder="Enter some text"
-                  style={{ width: 400, marginTop: 10, height: "50px" }}
+                  onChange={(value) => handleSelectChange(value, "education")}
+                  placeholder="Enter education e.g (Univerisity xyx, Bachelor's etc)"
+                  style={{ width: 380, marginTop: 10, height: "50px" }}
                   name="education"
                 />
               </div>
@@ -269,7 +270,7 @@ const EmployeScreen = () => {
           </div>
         </div>
         <Modal
-          title="Employee Info"
+          title="Employer"
           visible={isModalVisible}
           onCancel={handleCancel}
           footer={null}
