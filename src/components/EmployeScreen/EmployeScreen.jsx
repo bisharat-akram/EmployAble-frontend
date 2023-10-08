@@ -255,19 +255,23 @@ const EmployeScreen = () => {
               <div className="dropdown">
                 <div className="labelStyling">Education</div>
                 <Input
-                  onPressEnter={(value) => handleSelectChange(value.target.value, "education")}
+                  onPressEnter={(value) =>
+                    handleSelectChange(value.target.value, "education")
+                  }
                   placeholder="Enter education e.g (Univerisity xyx, Bachelor's etc)"
                   style={{ width: 380, marginTop: 10, height: "50px" }}
                   name="education"
                 />
               </div>
-              <div className="searchContainer">
-                <div className="labelStyling">Key words</div>
-                <Search
-                  placeholder="Search"
-                  onSearch={handleSearch}
-                  enterButton
-                  style={{ width: "50%", height: "50px" }}
+              <div className="dropdown">
+                <div className="labelStyling">Keywords</div>
+                <Input
+                  onPressEnter={(value) =>
+                    handleSelectChange(value.target.value, "search")
+                  }
+                  placeholder="Search by keywords"
+                  style={{ width: 380, marginTop: 10, height: "50px" }}
+                  name="search"
                 />
               </div>
             </div>
@@ -283,7 +287,6 @@ const EmployeScreen = () => {
           {isLoading ? (
             <div style={{ textAlign: "center", padding: "20px" }}>
               <Spin size="large" />{" "}
-              {/* Render a spinner if isLoading is true */}
             </div>
           ) : (
             <>
