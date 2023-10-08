@@ -152,15 +152,17 @@ const EmployeScreen = () => {
       return;
     }
   };
+
   useEffect(() => {
     skillListApi();
     jobListApi();
   }, []);
+
   useEffect(() => {
     getProfileData();
   }, [filters]);
+
   const handleLogoutSuccess = () => {
-    console.log("User logged out successfully");
     deleteToken();
     navigate("/");
   };
@@ -187,14 +189,6 @@ const EmployeScreen = () => {
         </div>
         <div className="EmployeMainContainer">
           <div className="EmployeFilterContainer">
-            <div className="searchContainer">
-              <Search
-                placeholder="Search"
-                onSearch={handleSearch}
-                enterButton
-                style={{ width: "50%", height: "50px" }}
-              />
-            </div>
             <Table
               columns={columns}
               dataSource={employeeInfo}
@@ -265,6 +259,15 @@ const EmployeScreen = () => {
                   placeholder="Enter education e.g (Univerisity xyx, Bachelor's etc)"
                   style={{ width: 380, marginTop: 10, height: "50px" }}
                   name="education"
+                />
+              </div>
+              <div className="searchContainer">
+                <div className="labelStyling">Key words</div>
+                <Search
+                  placeholder="Search"
+                  onSearch={handleSearch}
+                  enterButton
+                  style={{ width: "50%", height: "50px" }}
                 />
               </div>
             </div>
