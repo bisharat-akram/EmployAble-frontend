@@ -10,6 +10,7 @@ import { gapi } from 'gapi-script';
 export default function App() {
 
   useEffect(() => {
+    document.title = 'Employable';
     const start = async () => {
       try {
         await gapi.client.init({

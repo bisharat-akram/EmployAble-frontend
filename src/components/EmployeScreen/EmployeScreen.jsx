@@ -255,7 +255,7 @@ const EmployeScreen = () => {
               <div className="dropdown">
                 <div className="labelStyling">Education</div>
                 <Input
-                  onChange={(value) => handleSelectChange(value, "education")}
+                  onPressEnter={(value) => handleSelectChange(value.target.value, "education")}
                   placeholder="Enter education e.g (Univerisity xyx, Bachelor's etc)"
                   style={{ width: 380, marginTop: 10, height: "50px" }}
                   name="education"
