@@ -1,16 +1,13 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Signup from './components/Signup/Signup';
 import SignIn from './components/SignIn';
-import EmployeScreen from "./components/EmployeScreen";
-import UserScreen from "./components/UserScreen";
+import EmployeScreen from './components/EmployeScreen';
+import UserScreen from './components/UserScreen';
+import PrivateRouting from './routes/PrivateRouting';
 import { gapi } from 'gapi-script';
-import { useEffect } from 'react';
-import { QueryClientProvider,QueryClient } from "react-query";
-
 
 export default function App() {
-
-  const queryClient = new QueryClient()
 
   useEffect(() => {
     document.title = 'Employable';
@@ -18,7 +15,7 @@ export default function App() {
       try {
         await gapi.client.init({
           clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-          scope: ""
+          scope: '',
         });
         await gapi.load('client:auth2');
       } catch (error) {
@@ -30,19 +27,37 @@ export default function App() {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-    <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<SignIn />}/>
-        <Route index element={<SignIn />} />
-        <Route path="signup" element={<Signup />} />
-        <Route path="employe" element={<EmployeScreen />} />
-        <Route path="user" element={<UserScreen />} />
-    </Routes>
-  </BrowserRouter>
-  </QueryClientProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route 
+            path="/"
+            element={
+              <SignIn />
+            } 
+          />
+          <Route
+            path="signup"
+            element={
+              <Signup />
+            } 
+          />
+          <Route
+            path="employe"
+            element={
+              <PrivateRouting>
+                <EmployeScreen />
+              </PrivateRouting>
+            }
+          />
+          <Route
+            path="user"
+            element={
+              <PrivateRouting>
+                <UserScreen />
+              </PrivateRouting>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
   );
 }
-
-// const root = ReactDOM.createRoot(document.getElementById('root'));
-// root.render(<App />);
