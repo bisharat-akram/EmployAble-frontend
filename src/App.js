@@ -5,25 +5,11 @@ import SignIn from './components/SignIn';
 import EmployeScreen from './components/EmployeScreen';
 import UserScreen from './components/UserScreen';
 import PrivateRouting from './routes/PrivateRouting';
-import { gapi } from 'gapi-script';
 
 export default function App() {
 
   useEffect(() => {
     document.title = 'Employable';
-    const start = async () => {
-      try {
-        await gapi.client.init({
-          clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-          scope: '',
-        });
-        await gapi.load('client:auth2');
-      } catch (error) {
-        console.error('Google API initialization error:', error);
-      }
-    };
-
-    start();
   }, []);
 
   return (

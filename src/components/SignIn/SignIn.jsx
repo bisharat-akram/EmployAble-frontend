@@ -10,13 +10,13 @@ import {
   notification,
 } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { GoogleLogin } from "react-google-login";
 import "./SignInStyle.css"; // Import your CSS file for login styles
 import { useState } from "react";
 import { postApiWithoutAuth, getApiWithAuth } from "../utilis/api";
 import { useNavigate } from "react-router";
 import { setToken } from "../utilis/localStorage";
 import { LoadingOutlined } from "@ant-design/icons";
+import { GoogleLogin } from '@react-oauth/google';
 const antIcon = (
   <LoadingOutlined
     style={{
@@ -87,7 +87,7 @@ const SignIn = () => {
   const responseGoogle = async (res) => {
     setisLoading(true);
     const response = await postApiWithoutAuth("google-login/", {
-      access_token: res.accessToken,
+      access_token: res.credential,
     });
     setisLoading(false);
     if (!response.success) {
@@ -169,12 +169,11 @@ const SignIn = () => {
           <div className="HorizontalLine"></div>
         </div>
         <GoogleLogin
-          clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-          buttonText="Login with Google"
-          onSuccess={responseGoogle}
-          onFailure={responseGoogle}
-          cookiePolicy={"single_host_origin"}
+          text="Login with Google"
+          flow="auth-code"
           className="GoogleAuthStyle"
+          width="400"
+          onSuccess={responseGoogle}
         />
       </Card>
     </div>
