@@ -8,7 +8,7 @@ import PrivateRouting from "./routes/PrivateRouting";
 // import ReactGA from "react-ga";
 import ReactGA from "react-ga4";
 
-ReactGA.initialize("G-9HZHLHWQ7P"); // Replace with your GA Tracking ID
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_KEY); // Replace with your GA Tracking ID
 
 export default function App() {
   useEffect(() => {
