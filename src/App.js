@@ -17,7 +17,6 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      {/* <GAListener> */}
       <Routes>
         <Route path="/" element={<SignIn />} />
         <Route path="signup" element={<Signup />} />
@@ -38,16 +37,6 @@ export default function App() {
           }
         />
       </Routes>
-      {/* </GAListener> */}
     </BrowserRouter>
   );
 }
-// function GAListener({ children }) {
-//   let location = useLocation();
-
-//   useEffect(() => {
-//     ReactGA.pageview(location.pathname + location.search);
-//   }, [location]);
-
-//   return children;
-// }

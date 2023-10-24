@@ -109,7 +109,7 @@ const Signup = () => {
     ReactGA.event({
       category: "User",
       action: "Signup",
-      label: "User Signup",
+      label: "User Google Signup",
       value: 1,
     });
     navigate("/user");
