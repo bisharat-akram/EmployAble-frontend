@@ -8,7 +8,7 @@ import PrivateRouting from "./routes/PrivateRouting";
 import ReactGA from "react-ga";
 import { useLocation } from "react-router-dom";
 
-const TRACKING_ID = "G-5FQHTF4RP7"; // Replace with your GA Tracking ID
+const TRACKING_ID = "G-9HZHLHWQ7P"; // Replace with your GA Tracking ID
 ReactGA.initialize(TRACKING_ID);
 export default function App() {
   useEffect(() => {
