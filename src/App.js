@@ -7,10 +7,8 @@ import UserScreen from "./components/UserScreen";
 import PrivateRouting from "./routes/PrivateRouting";
 // import ReactGA from "react-ga";
 import ReactGA from "react-ga4";
-import { useLocation } from "react-router-dom";
 
 ReactGA.initialize("G-9HZHLHWQ7P"); // Replace with your GA Tracking ID
-ReactGA.send({ hitType: "pageview", page: window.location.pathname });
 
 export default function App() {
   useEffect(() => {
