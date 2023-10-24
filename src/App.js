@@ -5,11 +5,12 @@ import SignIn from "./components/SignIn";
 import EmployeScreen from "./components/EmployeScreen";
 import UserScreen from "./components/UserScreen";
 import PrivateRouting from "./routes/PrivateRouting";
-import ReactGA from "react-ga";
+// import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 import { useLocation } from "react-router-dom";
 
-const TRACKING_ID = "G-9HZHLHWQ7P"; // Replace with your GA Tracking ID
-ReactGA.initialize(TRACKING_ID);
+ReactGA.initialize("G-9HZHLHWQ7P"); // Replace with your GA Tracking ID
+ReactGA.send({ hitType: "pageview", page: window.location.pathname });
 export default function App() {
   useEffect(() => {
     document.title = "Employable";
@@ -17,37 +18,37 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <GAListener>
-        <Routes>
-          <Route path="/" element={<SignIn />} />
-          <Route path="signup" element={<Signup />} />
-          <Route
-            path="employe"
-            element={
-              <PrivateRouting>
-                <EmployeScreen />
-              </PrivateRouting>
-            }
-          />
-          <Route
-            path="user"
-            element={
-              <PrivateRouting>
-                <UserScreen />
-              </PrivateRouting>
-            }
-          />
-        </Routes>
-      </GAListener>
+      {/* <GAListener> */}
+      <Routes>
+        <Route path="/" element={<SignIn />} />
+        <Route path="signup" element={<Signup />} />
+        <Route
+          path="employe"
+          element={
+            <PrivateRouting>
+              <EmployeScreen />
+            </PrivateRouting>
+          }
+        />
+        <Route
+          path="user"
+          element={
+            <PrivateRouting>
+              <UserScreen />
+            </PrivateRouting>
+          }
+        />
+      </Routes>
+      {/* </GAListener> */}
     </BrowserRouter>
   );
 }
-function GAListener({ children }) {
-  let location = useLocation();
+// function GAListener({ children }) {
+//   let location = useLocation();
 
-  useEffect(() => {
-    ReactGA.pageview(location.pathname + location.search);
-  }, [location]);
+//   useEffect(() => {
+//     ReactGA.pageview(location.pathname + location.search);
+//   }, [location]);
 
-  return children;
-}
+//   return children;
+// }
