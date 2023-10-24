@@ -22,6 +22,8 @@ import { useNavigate } from "react-router";
 import { setToken } from "../utilis/localStorage";
 // import { useSnackbar } from "notistack";
 import { LoadingOutlined } from "@ant-design/icons";
+import ReactGA from "react-ga";
+
 const antIcon = (
   <LoadingOutlined
     style={{
@@ -73,6 +75,10 @@ const Signup = () => {
       description: "Signup Successfully",
       placement: "topLeft",
     });
+    ReactGA.event({
+      category: "User",
+      action: "Signed Up Normally",
+    });
 
     setToken(response.data.data.access);
     navigate("/user");
@@ -97,6 +103,10 @@ const Signup = () => {
       message: "Success",
       description: "Signup Successfully",
       placement: "topLeft",
+    });
+    ReactGA.event({
+      category: "User",
+      action: "Signed Up with Google",
     });
     navigate("/user");
   };
