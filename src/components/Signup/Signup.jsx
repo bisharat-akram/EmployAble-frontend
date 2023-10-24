@@ -22,7 +22,7 @@ import { useNavigate } from "react-router";
 import { setToken } from "../utilis/localStorage";
 // import { useSnackbar } from "notistack";
 import { LoadingOutlined } from "@ant-design/icons";
-import ReactGA from "react-ga";
+import ReactGA from "react-ga4";
 
 const antIcon = (
   <LoadingOutlined
@@ -77,7 +77,9 @@ const Signup = () => {
     });
     ReactGA.event({
       category: "User",
-      action: "Signed Up Normally",
+      action: "Signup",
+      label: "User Signup",
+      value: 1,
     });
 
     setToken(response.data.data.access);
@@ -106,7 +108,9 @@ const Signup = () => {
     });
     ReactGA.event({
       category: "User",
-      action: "Signed Up with Google",
+      action: "Signup",
+      label: "User Signup",
+      value: 1,
     });
     navigate("/user");
   };
