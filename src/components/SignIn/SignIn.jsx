@@ -30,7 +30,7 @@ const antIcon = (
 );
 
 const { Title, Text } = Typography;
-ReactGA.send({ hitType: "pageview", page: window.location.pathname });
+ReactGA.send({ hitType: "visitors", page: window.location.pathname });
 const SignIn = () => {
   const navigate = useNavigate();
   const [isLoading, setisLoading] = useState(false);
