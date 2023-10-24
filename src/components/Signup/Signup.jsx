@@ -15,11 +15,11 @@ import {
   CheckCircleOutlined,
 } from "@ant-design/icons";
 import "./Signup.css";
-import { GoogleLogin } from "react-google-login";
 import { useState } from "react";
 import { postApiWithoutAuth } from "../utilis/api";
 import { useNavigate } from "react-router";
 import { setToken } from "../utilis/localStorage";
+import { GoogleLogin } from '@react-oauth/google';
 // import { useSnackbar } from "notistack";
 import { LoadingOutlined } from "@ant-design/icons";
 const antIcon = (
@@ -81,7 +81,7 @@ const Signup = () => {
   const responseGoogle = async (res) => {
     setisLoading(true);
     const response = await postApiWithoutAuth("google-login/", {
-      access_token: res.accessToken,
+      access_token: res.credential,
     });
     setisLoading(false);
     if (!response.success) {
@@ -231,12 +231,11 @@ const Signup = () => {
         </div>
         <div style={{ marginTop: "20px" }}>
           <GoogleLogin
-            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-            buttonText="Login with Google"
-            onSuccess={responseGoogle}
-            onFailure={responseGoogle}
-            cookiePolicy={"single_host_origin"}
+            text="Login with Google"
+            flow="auth-code"
             className="GoogleAuthStyle"
+            width="400"
+            onSuccess={responseGoogle}
           />
         </div>
       </Card>
