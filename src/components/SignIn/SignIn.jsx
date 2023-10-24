@@ -16,7 +16,9 @@ import { postApiWithoutAuth, getApiWithAuth } from "../utilis/api";
 import { useNavigate } from "react-router";
 import { setToken } from "../utilis/localStorage";
 import { LoadingOutlined } from "@ant-design/icons";
-import { GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin } from "@react-oauth/google";
+import ReactGA from "react-ga4";
+
 const antIcon = (
   <LoadingOutlined
     style={{
@@ -28,7 +30,7 @@ const antIcon = (
 );
 
 const { Title, Text } = Typography;
-
+ReactGA.send({ hitType: "visitors", page: window.location.pathname });
 const SignIn = () => {
   const navigate = useNavigate();
   const [isLoading, setisLoading] = useState(false);
