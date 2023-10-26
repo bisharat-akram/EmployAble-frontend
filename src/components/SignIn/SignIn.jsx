@@ -45,6 +45,13 @@ const SignIn = () => {
     password: "",
   });
 
+  ReactGA.event({
+    category: "User",
+    action: "Visitor",
+    // label: "User Google Signup",
+    value: 3,
+  });
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setData({
