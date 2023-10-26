@@ -72,6 +72,12 @@ const SignIn = () => {
       });
       return;
     }
+    ReactGA.event({
+      category: "User",
+      action: "sign_in",
+      // label: "User Google Signup",
+      value: 2,
+    });
     setToken(response.data.data.access);
     userData();
   };
@@ -113,6 +119,12 @@ const SignIn = () => {
       });
       return;
     }
+    ReactGA.event({
+      category: "User",
+      action: "sign_in",
+      // label: "User Google Signup",
+      value: 2,
+    });
     setToken(response.data.data.access);
     notification.success({
       message: "Success",
