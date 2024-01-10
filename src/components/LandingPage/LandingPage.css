@@ -140,3 +140,9 @@
 .footerIconStyle {
   margin: 10px;
 }
+.contactUsHeadingStyle {
+  font-size: 32px;
+  font-weight: 700;
+  padding-top: 50px;
+  color: #020064;
+}

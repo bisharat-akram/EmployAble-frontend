@@ -15,7 +15,7 @@ const LandingPageConatctForm = () => {
   return (
     <>
       <div className="LandingPageContactFormMain">
-        <div className="aboutUsHeadingStyle" style={{ marginBottom: "30px" }}>
+        <div className="contactUsHeadingStyle" style={{ marginBottom: "30px" }}>
           Contact Us
         </div>
         <Form name="signup" onFinish={handleSubmit} style={{ width: "50%" }}>

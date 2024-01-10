@@ -39,7 +39,7 @@ const LandingPageNav = () => {
           </a>
         </div>
         <div key="contactUs">
-          <a href="#contact" className="LandingPageNavClass">
+          <a href="#contactUs" className="LandingPageNavClass">
             Contact Us
           </a>
         </div>
