@@ -164,7 +164,7 @@ const EmployeScreen = () => {
 
   const handleLogoutSuccess = () => {
     deleteToken();
-    navigate("/");
+    navigate("/signin");
   };
   return (
     <>
