@@ -1,6 +1,3 @@
-const publicRoutes = [
-    "/",
-    "/signup"
-]
+const publicRoutes = ["/", "/signup", "/signin"];
 
 export default publicRoutes;

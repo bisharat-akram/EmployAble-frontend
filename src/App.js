@@ -5,6 +5,7 @@ import SignIn from "./components/SignIn";
 import EmployeScreen from "./components/EmployeScreen";
 import UserScreen from "./components/UserScreen";
 import PrivateRouting from "./routes/PrivateRouting";
+import LandingPage from "./components/LandingPage/LandingPage";
 // import ReactGA from "react-ga";
 import ReactGA from "react-ga4";
 
@@ -18,7 +19,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<SignIn />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/signin" element={<SignIn />} />
         <Route path="signup" element={<Signup />} />
         <Route
           path="employe"

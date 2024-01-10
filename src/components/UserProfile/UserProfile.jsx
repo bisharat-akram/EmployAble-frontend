@@ -187,7 +187,7 @@ const UserProfile = () => {
 
   const handleLogoutSuccess = () => {
     deleteToken();
-    navigate("/");
+    navigate("/signin");
   };
 
   return (
