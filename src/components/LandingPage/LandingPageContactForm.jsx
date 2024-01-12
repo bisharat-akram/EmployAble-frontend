@@ -5,15 +5,12 @@ import { Form, Input, Button, notification } from "antd";
 const LandingPageConatctForm = () => {
   const { TextArea } = Input;
   const [state, handleSubmit] = useForm("mzbnzbbd");
-  const [notificationShown, setNotificationShown] = React.useState(false);
-
-  if (state.succeeded && !notificationShown) {
+  if (state.succeeded) {
     notification.success({
       message: "Success",
       description: "Message sent successfully",
       placement: "topLeft",
     });
-    setNotificationShown(true);
   }
 
   return (
