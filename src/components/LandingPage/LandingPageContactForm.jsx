@@ -4,14 +4,18 @@ import "./LandingPage.css";
 import { Form, Input, Button, notification } from "antd";
 const LandingPageConatctForm = () => {
   const { TextArea } = Input;
-  const [state, handleSubmit] = useForm("mnqenaer");
-  if (state.succeeded) {
+  const [state, handleSubmit] = useForm("mzbnzbbd");
+  const [notificationShown, setNotificationShown] = React.useState(false);
+
+  if (state.succeeded && !notificationShown) {
     notification.success({
       message: "Success",
-      description: "Message send successfully",
+      description: "Message sent successfully",
       placement: "topLeft",
     });
+    setNotificationShown(true);
   }
+
   return (
     <>
       <div className="LandingPageContactFormMain">
@@ -66,6 +70,7 @@ const LandingPageConatctForm = () => {
               name="subject"
             />
           </Form.Item>
+
           <div className="LandingPageLabelStyle">Message</div>
           <Form.Item
             name="message"
@@ -83,16 +88,17 @@ const LandingPageConatctForm = () => {
               name="message"
             />
           </Form.Item>
-          <div>
+          <Form.Item>
             <Button
-              type="submit"
+              type="primary"
+              htmlType="submit"
+              block
+              className="SignupStyle"
               disabled={state.submitting}
-              className="LandingPageLoginButton"
-              style={{ marginBottom: "30px" }}
             >
               Submit
             </Button>
-          </div>
+          </Form.Item>
         </Form>
       </div>
     </>
