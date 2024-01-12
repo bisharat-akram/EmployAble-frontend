@@ -29,6 +29,12 @@
   justify-content: space-between;
   height: 80px;
   width: 100%;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #fff; /* Set your desired background color */
+  z-index: 1000;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 .LandingPageMainHeading {
   font-size: 54px;
@@ -56,11 +62,13 @@
   font-size: 30px;
   font-weight: 700;
   height: 80px;
+  margin-bottom: 20px;
 }
 .LandingPageButtonDivStyle {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   margin-top: 40px;
 }
 .aboutPageStyle {
@@ -70,8 +78,12 @@
   align-items: center;
   padding-left: 40px;
   padding-right: 40px;
-  margin-top: 60px;
+  padding-top: 40px;
+  margin-top: 40px;
   flex-direction: column;
+}
+.JobSeekersMainContainer {
+  padding-top: 40px;
 }
 .aboutUsDataStyle {
   font-size: 20px;
@@ -145,4 +157,18 @@
   font-weight: 700;
   padding-top: 50px;
   color: #020064;
+}
+.contactUsSubHeadingStyle {
+  font-size: 18px;
+  font-weight: 500;
+  color: #3d55fe;
+}
+.LandingPageEmployerButtonStyle {
+  margin-left: 15px;
+  color: #3d55fe;
+}
+.LandingPagejobSeekerButtonStyle {
+  margin-left: 65px;
+  background-color: #3d55fe;
+  color: white;
 }

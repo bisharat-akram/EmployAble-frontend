@@ -13,9 +13,6 @@ import {
   FacebookOutlined,
   TwitterOutlined,
 } from "@ant-design/icons";
-import Insta from "../../assets/images/instaIcon.jpeg";
-import Facebook from "../../assets/images/facebookIcon.png";
-import Twitter from "../../assets/images/twitterIcon.jpeg";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -36,19 +33,33 @@ const LandingPage = () => {
           style={{
             marginLeft: "40px",
             marginRight: "40px",
+            paddingTop: "30px",
           }}
+          id="/"
         >
           <div className="LandingPageMainHeading">{Data.Heading}</div>
           <div className="LandingPageMainSubHeading">{Data.SubHeading}</div>
           <div className="LandingPageButtonDivStyle">
-            <Button
-              className="LandingPageButtonStyle"
-              onClick={() => {
-                navigate("/signin");
-              }}
-            >
-              {Data.LandingPageButton}
-            </Button>
+            <div>
+              <Button
+                className="LandingPageButtonStyle"
+                onClick={() => {
+                  navigate("/signup");
+                }}
+              >
+                {Data.LandingPageSignUpButton}
+              </Button>
+            </div>
+            <div>
+              <Button
+                className="LandingPageButtonStyle"
+                onClick={() => {
+                  navigate("/signin");
+                }}
+              >
+                {Data.LandingPageButton}
+              </Button>
+            </div>
           </div>
         </div>
         <div id="about">

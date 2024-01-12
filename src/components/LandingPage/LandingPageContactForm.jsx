@@ -16,8 +16,15 @@ const LandingPageConatctForm = () => {
   return (
     <>
       <div className="LandingPageContactFormMain">
-        <div className="contactUsHeadingStyle" style={{ marginBottom: "30px" }}>
+        <div className="contactUsHeadingStyle" style={{ marginBottom: "10px" }}>
           Contact Us
+        </div>
+        <div
+          className="contactUsSubHeadingStyle"
+          style={{ marginBottom: "30px" }}
+        >
+          Connect with us to learn more about empowering individuals with
+          criminal records
         </div>
         <Form name="signup" onFinish={handleSubmit} style={{ width: "50%" }}>
           <div className="LandingPageLabelStyle">Name</div>
@@ -31,6 +38,24 @@ const LandingPageConatctForm = () => {
             ]}
           >
             <Input placeholder="Name" className="InputStyle" name="name" />
+          </Form.Item>
+          <div className="LandingPageLabelStyle">Phone</div>
+
+          <Form.Item
+            name="phone"
+            rules={[
+              {
+                pattern: /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
+                message: "Please enter a valid phone number",
+                required: false,
+              },
+            ]}
+          >
+            <Input
+              placeholder="Phone Number"
+              className="InputStyle"
+              name="phone"
+            />
           </Form.Item>
           <div className="LandingPageLabelStyle">Email</div>
           <Form.Item
@@ -48,23 +73,6 @@ const LandingPageConatctForm = () => {
               placeholder="Email"
               className="InputStyle"
               name="email"
-            />
-          </Form.Item>
-          <div className="LandingPageLabelStyle">Subject</div>
-
-          <Form.Item
-            name="subject"
-            rules={[
-              {
-                required: true,
-                message: "Please enter your subject!",
-              },
-            ]}
-          >
-            <Input
-              placeholder="Subject"
-              className="InputStyle"
-              name="subject"
             />
           </Form.Item>
 

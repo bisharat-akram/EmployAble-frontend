@@ -21,7 +21,9 @@ const LandingPageNav = () => {
         }}
       >
         <div key="logo" style={{ marginTop: "15px" }}>
-          <img src={Logo} alt="EmployAble Logo" height={70} />
+          <a href="/">
+            <img src={Logo} alt="EmployAble Logo" height={60} />
+          </a>
         </div>
         <div key="about">
           <a href="#about" className="LandingPageNavClass">
